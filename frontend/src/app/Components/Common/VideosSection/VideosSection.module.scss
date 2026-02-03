@@ -1,0 +1,219 @@
+.videoSection {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 4rem 2rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 30%, rgba(255, 68, 68, 0.06) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(255, 153, 0, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255, 255, 255, 0.015) 2px, rgba(255, 255, 255, 0.015) 4px);
+    pointer-events: none;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.mainTitle {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #eae6e6;
+}
+
+.categoryNav {
+   display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border-radius: 50px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+
+  .navBtn {
+      padding: 0.625rem 1.5rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  font-family: 'Darker Grotesque', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 153, 0, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+  }
+
+  &.active {
+    background: linear-gradient(135deg, rgba(255, 68, 68, 0.2) 0%, rgba(255, 153, 0, 0.2) 100%);
+    border-color: rgba(255, 153, 0, 0.5);
+    color: #fff;
+    box-shadow: 
+      0 4px 15px rgba(255, 153, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }}
+}
+
+.contentGrid {
+  display: grid;
+  grid-template-columns: 1fr 280px; // Main grid + Ad column
+  gap: 20px;
+
+  @media (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.videoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.videoCard {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  padding: 2rem;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+
+  .thumbnailContainer {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    border-radius: 4px;
+
+    .thumbnail {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgba(0,0,0,0.6) 0%, transparent 60%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .playIcon {
+        background: red;
+        border-radius: 50%;
+        padding: 8px;
+        color: white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      }
+
+      .tag {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: rgba(0,0,0,0.7);
+        color: #ffcc00;
+        font-weight: 900;
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+    }
+  }
+
+  .cardInfo {
+    margin-top: 10px;
+
+    .categoryLabel {
+      color: #003a7a;
+      font-weight: bold;
+      font-size: 12px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .videoTitle {
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1.4;
+      color: #f4f1f1;
+    }
+  }
+}
+
+.adBlock {
+  .adLabel {
+    display: block;
+    text-align: center;
+    font-size: 10px;
+    color: #999;
+    margin-bottom: 5px;
+  }
+  .adImageWrapper img {
+    width: 100%;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+}
+
+.footerAction {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+
+  .viewAllBtn {
+    background: #0056b3;
+    color: white;
+    padding: 8px 24px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+
+    &:hover { background: #003a7a; }
+  }
+}

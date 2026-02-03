@@ -1,0 +1,35 @@
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0;
+  font-size: 14px;
+  color: #666;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+
+  .link {
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #d32f2f;
+      text-decoration: underline;
+    }
+  }
+
+  .separator {
+    color: #999;
+  }
+
+  .current {
+    color: #666;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 500px;
+  }
+}

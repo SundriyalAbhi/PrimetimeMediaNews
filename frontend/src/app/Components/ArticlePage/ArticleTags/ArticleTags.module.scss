@@ -1,0 +1,51 @@
+.articleTags {
+  margin: 40px 0;
+
+  .tagsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #e0e0e0;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s;
+
+    &:hover {
+      background: #333;
+      color: #fff;
+    }
+  }
+
+  .bottomCta {
+    background: #1565c0;
+    padding: 20px;
+    border-radius: 4px;
+    margin-top: 24px;
+
+    .ctaText {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #fff;
+      margin: 0;
+
+      .link {
+        color: #ffa726;
+        text-decoration: none;
+        font-weight: 600;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
