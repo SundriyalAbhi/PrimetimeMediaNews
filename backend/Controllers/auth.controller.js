@@ -56,7 +56,7 @@ exports.UserSignUp = async (req, res) => {
 
 exports.UserSignIn = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ 
@@ -65,12 +65,15 @@ exports.UserSignIn = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email: email }).select('+password');
+    const query = { email: email };
+    if (role) query.role = role; 
+
+    const user = await User.findOne(query).select('+password');
     
     if (!user) {
       return res.status(404).json({ 
         success: false,
-        msg: "User does not exist" 
+        msg: `User with role "${role || 'any'}" does not exist` 
       });
     }
 
@@ -94,7 +97,7 @@ exports.UserSignIn = async (req, res) => {
       { 
         userId: user._id, 
         email: user.email,
-        role: user.role,
+        role: user.role,  
         permissions: user.permissions
       },
       process.env.SECRET,
@@ -114,7 +117,7 @@ exports.UserSignIn = async (req, res) => {
       userId: user._id,
       profilepic: user.ProfilePicture,
       name: user.name,
-      role: user.role,
+      role: user.role,  
       permissions: user.permissions,
       msg: "Welcome"
     });
@@ -127,3 +130,4 @@ exports.UserSignIn = async (req, res) => {
     });
   }
 };
+

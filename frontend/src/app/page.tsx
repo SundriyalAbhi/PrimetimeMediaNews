@@ -8,10 +8,10 @@ import Sports from "./Components/Home/SportsNewsSection/SportsNews";
 import Entertainment from "./Components/Home/EntertainmentNewsSection/EntertainmentNews";
 import { VideosSection } from "./Components/Common/VideosSection/VideosSection";
 import { PhotosSection } from "./Components/Common/PhotosSection/Photos";
-import { LifestyleSection } from "./Components/Home/Lifestyle/LifestyleSection";
 import Footer from "./Components/Common/Footer/Footer";
 import NewsCards from "./Components/Common/NewsCard/NewsCard";
 import { stateNewsData } from "@/Data/NewsCardData/NewsCardData";
+import LifestyleSection from "./Components/Home/Lifestyle/LifestyleSection";
 
 export default function Home() {
   return (

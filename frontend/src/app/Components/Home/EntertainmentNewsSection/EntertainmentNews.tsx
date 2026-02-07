@@ -1,6 +1,16 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useMemo } from 'react';
+import { useNewsContext } from '@/app/context/NewsContext';
 import styles from './EntertainmentNews.module.scss';
+
+interface RawEntItem {
+  slug: string;
+  title: string;
+  image?: string;
+  category: string;
+  tags?: string[];
+  subCategory?: string;
+}
 
 interface EntArticle {
   id: string;
@@ -11,41 +21,60 @@ interface EntArticle {
 
 const categories = ['Bollywood', 'TV', 'OTT', 'Reviews', 'Regional', 'Hollywood', 'Korean', 'Photos', 'Web Stories', 'Videos'];
 
-const entertainmentArticles: EntArticle[] = [
-  {
-    id: '1',
-    title: "Dhurandhar Creates History: Ranveer Singh Starrer Becomes First Hindi Film to Cross ₹1,000 Cr in India",
-    image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80',
-    category: 'Bollywood',
-  },
-  {
-    id: '2',
-    title: "End of an Era: Arijit Singh Announces Retirement from Playback Singing to Focus on Independent Music",
-    image: 'https://images.unsplash.com/photo-1514525253361-bee87184919a?w=800&q=80',
-    category: 'Music',
-  },
-  {
-    id: '3',
-    title: "Republic Day 2026: Sanjay Leela Bhansali's 'Bharat Gatha' Tableau Celebrates the Legacy of Indian Cinema",
-    image: 'https://images.unsplash.com/photo-1478720568477-152d9b164e26?w=800&q=80',
-    category: 'Bollywood',
-  },
-  {
-    id: '4',
-    title: "OTT This Week: Dhanush's 'Tere Ishk Mein' and 'Space Gen: Chandrayaan' Lead Streaming Charts",
-    image: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&q=80',
-    category: 'OTT',
-  },
-  {
-    id: '5',
-    title: "Sankranti Winner: Chiranjeevi's 'Mana Shankara' Crosses ₹200 Crore Mark Worldwide",
-    image: 'https://images.unsplash.com/photo-1598899303450-2335839333a1?w=800&q=80',
-    category: 'Regional',
-  },
-];
-
-export const Entertainment: React.FC = () => {
+const Entertainment: React.FC = () => {
+  const { allNews, loading } = useNewsContext();
   const [activeCategory, setActiveCategory] = useState('Bollywood');
+
+  const filteredEntNews = useMemo(() => {
+    if (!allNews) return [];
+    
+    return allNews.filter(item => 
+      item.category.toLowerCase() === 'entertainment' &&
+      (
+        item.subCategory?.toLowerCase() === activeCategory.toLowerCase() ||
+        item.tags?.some(tag => tag.toLowerCase() === activeCategory.toLowerCase()) ||
+        activeCategory === 'Bollywood'  // Default: Bollywood + general entertainment
+      )
+    );
+  }, [allNews, activeCategory]);
+
+  const entertainmentArticles: EntArticle[] = useMemo(() => {
+    if (!filteredEntNews.length) return [];
+    
+    return filteredEntNews.slice(0, 6).map((item, index) => ({
+      id: `${activeCategory.toLowerCase()}-${item.slug}-${index}`,
+      title: item.title,
+      image: item.image ? `/public/${item.image}` : 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=800&q=80',
+      category: activeCategory,
+    }));
+  }, [filteredEntNews, activeCategory]);
+
+  if (loading) {
+    return (
+      <section className={styles.sportsSection}>
+        <div className={styles.container}>
+          <div className={styles.articlesContainer}>
+            <div className={styles.articlesGrid}>
+              <article className={`${styles.featuredArticle} animate-pulse`}>
+                <div className="bg-gradient-to-br from-purple-200 to-pink-200 h-64 rounded-2xl"></div>
+              </article>
+              <div className={styles.regularArticles}>
+                {Array(5).fill(0).map((_, i) => (
+                  <article key={i} className={`${styles.regularArticle} animate-pulse`}>
+                    <div className="space-y-2">
+                      <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-6 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div className="bg-gray-200 h-24 rounded"></div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.sportsSection}>
@@ -70,16 +99,18 @@ export const Entertainment: React.FC = () => {
         <div className={styles.articlesContainer}>
           <div className={styles.articlesGrid}>
             {/* Featured Article */}
-            <article className={styles.featuredArticle}>
-              <div className={styles.featuredImage}>
-                <img src={entertainmentArticles[0].image} alt={entertainmentArticles[0].title} />
-                <div className={styles.imageOverlay}></div>
-              </div>
-              <div className={styles.featuredContent}>
-                <span className={styles.categoryBadge}>{entertainmentArticles[0].category}</span>
-                <h3 className={styles.featuredTitle}>{entertainmentArticles[0].title}</h3>
-              </div>
-            </article>
+            {entertainmentArticles[0] && (
+              <article className={styles.featuredArticle}>
+                <div className={styles.featuredImage}>
+                  <img src={entertainmentArticles[0].image} alt={entertainmentArticles[0].title} />
+                  <div className={styles.imageOverlay}></div>
+                </div>
+                <div className={styles.featuredContent}>
+                  <span className={styles.categoryBadge}>{entertainmentArticles[0].category}</span>
+                  <h3 className={styles.featuredTitle}>{entertainmentArticles[0].title}</h3>
+                </div>
+              </article>
+            )}
 
             {/* Regular Articles List */}
             <div className={styles.regularArticles}>

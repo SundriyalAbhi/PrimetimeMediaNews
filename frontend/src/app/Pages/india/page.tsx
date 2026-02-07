@@ -3,13 +3,13 @@ import MoreFromSection from '@/app/Components/Common/MoreFromSection/MoreFromSec
 import Navbar from '@/app/Components/Common/Navbar/Navber'
 import NewsCards from '@/app/Components/Common/NewsCard/NewsCard'
 import { PhotosSection } from '@/app/Components/Common/PhotosSection/Photos'
-import  { LatestNewsSection } from '@/app/Components/Common/LatestNewsSection/LatestNewsSection'
 import NewsSection from '@/app/Components/Common/NewsSection/NewsSection'
 import { moreFromIndiaData } from '@/Data/MoreFromSection/MoreFromSection'
 import { indiaMainNews, indiaSectionData } from '@/Data/NewsSection/NewsSection'
 import { stateNewsData } from '@/Data/SampleStateNewsData'
 import React from 'react'
 import { latestIndiaNews } from '@/Data/LatestNewsSection/LatestNewsSection'
+import LatestNewsSection from '@/app/Components/Common/LatestNewsSection/LatestNewsSection'
 
 const page = () => {
   return (

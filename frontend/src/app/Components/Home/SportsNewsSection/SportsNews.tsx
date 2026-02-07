@@ -1,47 +1,77 @@
-"use client"
-import React, { useState } from 'react';
+"use client";
+import React, { useState, useMemo } from 'react';
+import { useNewsContext } from '@/app/context/NewsContext';
 import styles from './SportsNews.module.scss';
+
+interface RawSportsItem {
+  slug: string;
+  title: string;
+  image?: string;
+  category: string;
+  tags?: string[];
+  subCategory?: string;
+}
 
 interface SportsArticle {
   id: string;
   title: string;
   image: string;
-  isFeatured?: boolean;
+  isFeatured: boolean;
 }
 
 const sportsCategories = ['Cricket', 'Football', 'Tennis', 'Photos', 'Web Stories', 'Video'];
 
-const sportsArticles: SportsArticle[] = [
-  {
-    id: '1',
-    title: 'Novak Djokovic gets walkover in Australian Open quarterfinal after losing 2 sets',
-    image: 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80',
-    isFeatured: true,
-  },
-  {
-    id: '2',
-    title: 'Bangladesh accuses ICC of unfair scheduling after getting knocked out of U19 World Cup 2026',
-    image: 'https://images.unsplash.com/photo-1540747913346-19e32ce4e97d?w=800&q=80',
-  },
-  {
-    id: '3',
-    title: 'IND vs NZ: Should Ishan Kishan open with Abhishek Sharma today in 4th T20I?',
-    image: 'https://images.unsplash.com/photo-1531415074968-036ba1b575da?w=800&q=80',
-  },
-  {
-    id: '4',
-    title: 'Suryakumar Yadav surpasses Virat Kohli as captain, targets Rohit Sharma next in special T20I record',
-    image: 'https://images.unsplash.com/photo-1624526267942-ab0ff8a3e972?w=800&q=80',
-  },
-  {
-    id: '5',
-    title: 'WPL 2026 points table: Gujarat Giants race ahead in playoff race, RCB still favourites for final',
-    image: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&q=80',
-  },
-];
-
-export const Sports: React.FC = () => {
+const Sports: React.FC = () => {
+  const { sportsNews, loading } = useNewsContext();
   const [activeCategory, setActiveCategory] = useState('Cricket');
+
+  const filteredSportsNews = useMemo(() => {
+    if (!sportsNews) return [];
+    
+    return sportsNews.filter(item => 
+      item.subCategory?.toLowerCase().includes(activeCategory.toLowerCase()) ||
+      item.tags?.some(tag => tag.toLowerCase().includes(activeCategory.toLowerCase())) ||
+      activeCategory === 'Cricket'
+    );
+  }, [sportsNews, activeCategory]);
+
+  const sportsArticles: SportsArticle[] = useMemo(() => {
+    if (!filteredSportsNews.length) return [];
+    
+    return filteredSportsNews.slice(0, 6).map((item, index) => ({
+      id: `${activeCategory.toLowerCase()}-${item.slug}-${index}`,
+      title: item.title,
+      image: item.image ? `/public/${item.image}` : 'https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=800&q=80',
+      isFeatured: index === 0,
+    }));
+  }, [filteredSportsNews, activeCategory]);
+
+  if (loading) {
+    return (
+      <section className={styles.sportsSection}>
+        <div className={styles.container}>
+          <div className={styles.articlesContainer}>
+            <div className={styles.articlesGrid}>
+              <article className={`${styles.featuredArticle} animate-pulse`}>
+                <div className="bg-gradient-to-br from-gray-200 to-gray-300 h-64 rounded-2xl"></div>
+              </article>
+              <div className={styles.regularArticles}>
+                {Array(5).fill(0).map((_, i) => (
+                  <article key={i} className={`${styles.regularArticle} animate-pulse`}>
+                    <div className="space-y-2">
+                      <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                      <div className="h-6 bg-gray-200 rounded w-full"></div>
+                    </div>
+                    <div className="bg-gray-200 h-24 rounded"></div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.sportsSection}>
@@ -66,16 +96,18 @@ export const Sports: React.FC = () => {
         <div className={styles.articlesContainer}>
           <div className={styles.articlesGrid}>
             {/* Featured Article */}
-            <article className={styles.featuredArticle}>
-              <div className={styles.featuredImage}>
-                <img src={sportsArticles[0].image} alt={sportsArticles[0].title} />
-                <div className={styles.imageOverlay}></div>
-              </div>
-              <div className={styles.featuredContent}>
-                <span className={styles.categoryBadge}>Sports</span>
-                <h3 className={styles.featuredTitle}>{sportsArticles[0].title}</h3>
-              </div>
-            </article>
+            {sportsArticles[0] && (
+              <article className={styles.featuredArticle}>
+                <div className={styles.featuredImage}>
+                  <img src={sportsArticles[0].image} alt={sportsArticles[0].title} />
+                  <div className={styles.imageOverlay}></div>
+                </div>
+                <div className={styles.featuredContent}>
+                  <span className={styles.categoryBadge}>Sports</span>
+                  <h3 className={styles.featuredTitle}>{sportsArticles[0].title}</h3>
+                </div>
+              </article>
+            )}
 
             {/* Regular Articles */}
             <div className={styles.regularArticles}>

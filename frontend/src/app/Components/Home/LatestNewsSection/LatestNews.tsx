@@ -1,4 +1,6 @@
+"use client";
 import React from 'react';
+import { useNewsContext } from '@/app/context/NewsContext';
 import styles from './LatestNews.module.scss';
 
 interface LatestNewsItem {
@@ -6,66 +8,57 @@ interface LatestNewsItem {
   category: string;
   title: string;
   image: string;
+  slug: string;
 }
 
-const latestNewsData: LatestNewsItem[] = [
-  {
-    id: '1',
-    category: 'Technology',
-    title: 'Amazon may have accidentally sent layoff alert to AWS staff: Up to 16000 jobs at risk',
-    image: 'https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?w=800&q=80',
-  },
-  {
-    id: '2',
-    category: 'Maharashtra',
-    title: "'Mein toh shapath lene wala hun': Old video of Ajit Pawar's remarks during a press meet goes viral",
-    image: 'https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?w=800&q=80',
-  },
-  {
-    id: '3',
-    category: 'India',
-    title: "'Runway was not in sight...': Crew to ATC moments before Ajit Pawar's plane crashed in Baramati",
-    image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=800&q=80',
-  },
-  {
-    id: '4',
-    category: 'Entertainment',
-    title: "Here's why Reddit users think Arijit Singh's retirement is more of a 'rebellion'",
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=800&q=80',
-  },
-  {
-    id: '5',
-    category: 'Entertainment',
-    title: "Karan Wahi breaks silence on wedding rumours with Dil Mill Gaye co-star Jennifer Winget: 'Free ki...'",
-    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80',
-  },
-  {
-    id: '6',
-    category: 'Technology',
-    title: 'Google improves AI search experience by making AI overviews and AI mode more Seamless',
-    image: 'https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&q=80',
-  },
-  {
-    id: '7',
-    category: 'Business',
-    title: '115% return in 1 year: Stock under Rs 50 gains amid rally in stock market, check details',
-    image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&q=80',
-  },
-  {
-    id: '8',
-    category: 'Entertainment',
-    title: 'Karan Wahi-Jennifer Winget shows: From Dill Mill Gaye to Raisinghani vs Raisinghani',
-    image: 'https://images.unsplash.com/photo-1595152772835-219674b2a8a6?w=800&q=80',
-  },
-  {
-    id: '9',
-    category: 'Education',
-    title: 'JEE Main 2026 tentative cutoff: Check category-wise cut off percentile',
-    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
-  },
-];
+const LatestNews: React.FC = () => {
+  const { allNews, indiaNews, sportsNews, businessNews, loading } = useNewsContext();
 
-export const LatestNews: React.FC = () => {
+  console.log(indiaNews,sportsNews,businessNews)
+
+  const displayNews: LatestNewsItem[] = React.useMemo(() => {
+    const latestNews: LatestNewsItem[] = [];
+    
+    // Prioritize sections with data
+    const sections = [
+      { key: 'india', data: indiaNews },
+      { key: 'sports', data: sportsNews },
+      { key: 'business', data: businessNews }
+    ];
+    
+    sections.forEach(({ key, data }) => {
+      if (data && Array.isArray(data) && data.length > 0) {
+        const item = data[0];
+        latestNews.push({
+          id: `${key}-${item.slug}`,
+          category: item.category || key.toUpperCase(),
+          title: item.title,
+          image: item.image || '',
+          slug: item.slug,
+        });
+      }
+    });
+    
+    return latestNews.slice(0, 6);
+  }, [indiaNews, sportsNews, businessNews]);
+
+  if (loading) {
+    return (
+      <section className={styles.latestNewsSection}>
+        <div className={styles.container}>
+          <div className={styles.newsGrid}>
+            {[0,1,2].map((i) => (
+              <article key={i} className={styles.newsItem}>
+                <div className={`${styles.content} animate-pulse bg-gray-200 h-24 rounded`}></div>
+                <div className={`${styles.imageWrapper} animate-pulse bg-gray-200 h-48 rounded`}></div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className={styles.latestNewsSection}>
       <div className={styles.container}>
@@ -75,14 +68,19 @@ export const LatestNews: React.FC = () => {
         </div>
 
         <div className={styles.newsGrid}>
-          {latestNewsData.map((item) => (
+          {displayNews.map((item) => (
             <article key={item.id} className={styles.newsItem}>
               <div className={styles.content}>
                 <span className={styles.category}>{item.category}</span>
                 <h3 className={styles.newsTitle}>{item.title}</h3>
               </div>
               <div className={styles.imageWrapper}>
-                <img src={item.image} alt={item.title} />
+                <img 
+                  src={item.image ? `/public/${item.image}` : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80'}
+                  alt={item.title}
+                  className="w-full h-48 object-cover rounded"
+                  loading="lazy"
+                />
               </div>
             </article>
           ))}
@@ -90,7 +88,7 @@ export const LatestNews: React.FC = () => {
 
         <div className={styles.readMoreWrapper}>
           <button className={styles.readMoreButton}>
-            Read More
+            Read More News
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
               <path d="M7 4L13 10L7 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
             </svg>

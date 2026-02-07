@@ -1,13 +1,24 @@
-import React from 'react';
+"use client";
+import React, { useMemo } from 'react';
+import { useNewsContext } from '@/app/context/NewsContext';
 import styles from './Newslist.module.scss';
+
+interface RawNewsItem {
+  slug: string;
+  title: string;
+  summary?: string;
+  image?: string;
+  category: string;
+  tags?: string[];
+}
 
 interface NewsArticle {
   id: string;
   category: string;
   title: string;
   image: string;
-  isOpinion?: boolean;
-  isVideo?: boolean;
+  isOpinion: boolean;
+  isVideo: boolean;
 }
 
 interface TrendingItem {
@@ -16,91 +27,102 @@ interface TrendingItem {
   image: string;
 }
 
-const newsArticles: NewsArticle[] = [
-  {
-    id: '1',
-    category: 'India',
-    title: 'Ban on entry of all non-Hindus to Char Dham: Not justified',
-    image: 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=800&q=80',
-    isOpinion: true,
-  },
-  {
-    id: '2',
-    category: 'India',
-    title: "Learjet 45 under scrutiny after Ajit Pawar's death; aircraft linked to 200 accidents globally",
-    image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=80',
-  },
-  {
-    id: '3',
-    category: 'India',
-    title: "President Murmu addresses budget session: 'Govt tackled corruption, ensured use of public funds'",
-    image: 'https://images.unsplash.com/photo-1591604129842-37fda37b0b0e?w=800&q=80',
-    isVideo: true,
-  },
-  {
-    id: '4',
-    category: 'India',
-    title: "Ajit Pawar's untimely demise 'very shocking and saddening': PM Modi",
-    image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=800&q=80',
-  },
-  {
-    id: '5',
-    category: 'Maharashtra',
-    title: "Ajit Pawar's last tweet: Here's what Maharashtra Dy CM said on social media hours before death",
-    image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&q=80',
-    isVideo: true,
-  },
-  {
-    id: '6',
-    category: 'Maharashtra',
-    title: "Ajit Pawar dies: Details of aircraft in which Maharashtra Deputy CM was travelling",
-    image: 'https://images.unsplash.com/photo-1498049860654-af1a5c566876?w=800&q=80',
-  },
-  {
-    id: '7',
-    category: 'Maharashtra',
-    title: "Ajit Pawar plane crash: Yugendra Pawar breaks down after Maharashtra Deputy CM's tragic death",
-    image: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80',
-    isVideo: true,
-  },
-  {
-    id: '8',
-    category: 'Maharashtra',
-    title: "Sanjay Raut calls Ajit Pawar's death 'black day for Maharashtra', says state lost strongest leader",
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=80',
-    isVideo: true,
-  },
-];
+const NewsList: React.FC = () => {
+  const { allNews, loading } = useNewsContext();
 
-const trendingItems: TrendingItem[] = [
-  {
-    id: '1',
-    title: "Singapore envoy Simon Wong enjoys Delhi's first rain of 2026 with tea and pakodas, netizens react",
-    image: 'https://images.unsplash.com/photo-1571942676516-bcab84649e44?w=400&q=80',
-  },
-  {
-    id: '2',
-    title: "Chips, smiles: Yogi Adityanath's sweet moment with a young child goes viral | WATCH",
-    image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=400&q=80',
-  },
-  {
-    id: '3',
-    title: "Major Rishabh Sambyal: The officer by the President's side who has won social media's admiration",
-    image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&q=80',
-  },
-];
+  const newsArticles: NewsArticle[] = useMemo(() => {
+    if (!allNews) return [];
+    
+    const sectionArticles: { [key: string]: RawNewsItem[] } = {};
+    
+    allNews.forEach(item => {
+      const section = item.category.toLowerCase();
+      if (!sectionArticles[section]) sectionArticles[section] = [];
+      sectionArticles[section].push(item);
+    });
+    
+    const articles: NewsArticle[] = [];
+    
+    // Take 2 from each section
+    Object.entries(sectionArticles).forEach(([section, items]) => {
+      items.slice(0, 2).forEach((item, idx) => {
+        articles.push({
+          id: `${section}-${item.slug}-${idx}`,
+          category: item.category,
+          title: item.title,
+          image: item.image || '',
+          isOpinion: item.tags?.includes('opinion'),
+          isVideo: item.tags?.includes('video'),
+        });
+      });
+    });
+    
+    return articles.slice(0, 12);
+  }, [allNews]);
 
-export const NewsList: React.FC = () => {
+  const trendingItems: TrendingItem[] = useMemo(() => {
+    if (!allNews) return [];
+    
+    // ONLY trending tagged items
+    return allNews
+      .filter(item => item.tags?.includes('trending'))
+      .slice(0, 5)
+      .map((item, index) => ({
+        id: `${index}-${item.slug}`,
+        title: item.title,
+        image: item.image || '',
+      }));
+  }, [allNews]);
+
+  if (loading) {
+    return (
+      <section className={styles.newsListSection}>
+        <div className={styles.container}>
+          <div className={styles.mainContent}>
+            <div className={styles.newsGrid}>
+              {Array(8).fill(0).map((_, i) => (
+                <article key={i} className={`${styles.newsCard} animate-pulse`}>
+                  <div className="bg-gray-200 h-40 w-full rounded"></div>
+                  <div className="mt-3 space-y-2">
+                    <div className="h-4 bg-gray-200 rounded w-full"></div>
+                    <div className="h-5 bg-gray-200 rounded w-3/4"></div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+          <aside className={styles.sidebar}>
+            <div className={`${styles.trendingSection} animate-pulse`}>
+              <div className="h-8 bg-gray-200 w-32 rounded mb-6"></div>
+              {Array(3).fill(0).map((_, i) => (
+                <div key={i} className="flex gap-3 mb-4">
+                  <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+                  <div className="flex-1 space-y-1">
+                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div className="h-12 bg-gray-200 rounded"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className={styles.newsListSection}>
       <div className={styles.container}>
-        {/* Main News List */}
+        {/* Main News List - 1-2 per section */}
         <div className={styles.mainContent}>
           <div className={styles.newsGrid}>
             {newsArticles.map((article) => (
               <article key={article.id} className={styles.newsCard}>
                 <div className={styles.cardImage}>
-                  <img src={article.image} alt={article.title} />
+                  <img 
+                    src={article.image ? `/public/${article.image}` : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80'}
+                    alt={article.title}
+                  />
                   {article.isVideo && (
                     <div className={styles.videoIcon}>
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -130,7 +152,7 @@ export const NewsList: React.FC = () => {
           </div>
         </div>
 
-        {/* Trending Sidebar */}
+        {/* Trending Sidebar - ONLY trending tag */}
         <aside className={styles.sidebar}>
           <div className={styles.trendingSection}>
             <div className={styles.trendingHeader}>
@@ -145,7 +167,10 @@ export const NewsList: React.FC = () => {
                     <span>{index + 1}</span>
                   </div>
                   <div className={styles.trendingImage}>
-                    <img src={item.image} alt={item.title} />
+                    <img 
+                      src={item.image ? `/public/${item.image}` : 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80'}
+                      alt={item.title}
+                    />
                   </div>
                   <h4 className={styles.trendingText}>{item.title}</h4>
                 </article>
@@ -153,7 +178,7 @@ export const NewsList: React.FC = () => {
             </div>
           </div>
 
-          {/* Advertisement Placeholder */}
+          {/* Advertisement */}
           <div className={styles.adSpace}>
             <div className={styles.adContent}>
               <span className={styles.adLabel}>ADVERTISEMENT</span>
