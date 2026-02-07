@@ -25,7 +25,7 @@ export interface ApiResponse<T = any> {
 
 class NewsService {
   async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
-    const url = `${baseURL}${endpoint}`;
+    const url = `${baseURL}/news${endpoint}`;
     const res = await fetch(url, {
       headers: { "Content-Type": "application/json" },
       ...options,
