@@ -13,6 +13,7 @@ export interface NewsGridItem {
   slug?: string;
   category?: string;
   subCategory: string;
+  isTrending?: boolean;
 }
 
 export interface TopNewsItem {
@@ -101,14 +102,18 @@ const NewsSection: React.FC<NewsSectionProps> = ({
       title: item.title,
       slug: item.slug,
       category: item.category,
-      subCategory: item.subCategory || ''
+      subCategory: item.subCategory || '',
+      isTrending: item.isTrending
     }));
   }, [providedMainNews, sectionNews, section]);
 
   const topNews: TopNewsItem[] = React.useMemo(() => {
     if (providedTopNews) return providedTopNews;
     
-    return sectionNews.slice(0, 5).map((item, index) => ({
+    const trendingNews = sectionNews.filter(item => item.isTrending === true);
+    const newsToShow = trendingNews.length >= 5 ? trendingNews : sectionNews;
+    
+    return newsToShow.slice(0, 5).map((item, index) => ({
       id: `${section}-top-${index}`,
       title: item.title,
       image: getImageSrc(item.image),
@@ -134,6 +139,8 @@ const NewsSection: React.FC<NewsSectionProps> = ({
     );
   }
 
+  const hasTrendingNews = sectionNews.some(item => item.isTrending === true);
+
   return (
     <div className={styles.pageWrapper}>
       <section className={styles.sectionContainer}>
@@ -142,7 +149,7 @@ const NewsSection: React.FC<NewsSectionProps> = ({
           {subCategories.length > 0 && (
             <nav className={styles.subCategoryNav}>
               {subCategories.map((cat) => {
-                const categorySlug = cat.toLowerCase().replace(/\\s+/g, '-');
+                const categorySlug = cat.toLowerCase().replace(/\s+/g, '-');
                 return (
                   <Link
                     key={cat}
@@ -169,7 +176,9 @@ const NewsSection: React.FC<NewsSectionProps> = ({
           {showSidebar && topNews.length > 0 && (
             <aside className={styles.sidebar}>
               <div className={styles.adPlaceholder}>Advertisement</div>
-              <h3 className={styles.topNewsTitle}>Top News</h3>
+              <h3 className={styles.topNewsTitle}>
+                {hasTrendingNews ? 'Trending News' : 'Top News'}
+              </h3>
               <div className={styles.topNewsList}>
                 {topNews.map((news) => (
                   <Link
@@ -198,7 +207,7 @@ interface NewsCardProps extends NewsGridItem {
   currentSection: string;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ image, title, slug, category, currentSection, subCategory }) => {
+const NewsCard: React.FC<NewsCardProps> = ({ image, title, slug, category, currentSection, subCategory, isTrending }) => {
   const pathname = usePathname();
   const section = getSection(pathname, category, currentSection);
 
@@ -214,6 +223,14 @@ const NewsCard: React.FC<NewsCardProps> = ({ image, title, slug, category, curre
             loading="lazy"
           />
           {category && <span className={styles.categoryBadge}>{category}</span>}
+          {isTrending && (
+            <span className={styles.trendingBadge}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+              </svg>
+              Trending
+            </span>
+          )}
         </div>
         <p className={styles.newsTitle}>{title}</p>
       </div>
@@ -231,6 +248,14 @@ const NewsCard: React.FC<NewsCardProps> = ({ image, title, slug, category, curre
           loading="lazy"
         />
         {category && <span className={styles.categoryBadge}>{category}</span>}
+        {isTrending && (
+          <span className={styles.trendingBadge}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/>
+            </svg>
+            Trending
+          </span>
+          )}
       </div>
       <p className={styles.newsTitle}>{title}</p>
     </Link>

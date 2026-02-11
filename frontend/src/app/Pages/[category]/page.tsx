@@ -124,6 +124,9 @@ export default function CategoryPage() {
     notFound();
   }
 
+  console.log(transformedNews)
+  console.log(transformedTrendingNews)
+
   return (
     <>
       <NewsSection 
