@@ -18,9 +18,9 @@ interface ArticleData {
   section: string;
   category: string;
   title: string;
-  subtitle?: string;
+  subtitle: string;  
   image: string;
-  date?: string;
+  date: string;
   author?: string;
   readTime?: string;
   content: string;
@@ -43,6 +43,7 @@ interface RelatedArticle {
   slug: string;
   section?: string;
   category?: string;
+  image?: string;
 }
 
 interface ArticlePageClientProps {
@@ -62,6 +63,8 @@ export default function ArticlePageClient({
   section,
   category
 }: ArticlePageClientProps) {
+  console.log('ArticlePageClient received:', article);
+  
   return (
     <div className={styles.articlePage}>
       <div className={styles.container}>
@@ -77,9 +80,9 @@ export default function ArticlePageClient({
             <ArticleHeader article={article} />
             <ArticleContent content={article.content} />
             <RelatedArticles articles={relatedArticles} />
-            {/* {article.tags && article.tags.length > 0 && (
+            {article.tags && article.tags.length > 0 && (
               <ArticleTags tags={article.tags} />
-            )} */}
+            )}
           </div>
 
           {/* Sidebar */}
@@ -92,7 +95,6 @@ export default function ArticlePageClient({
             </div>
             
             <TopNewsSidebar news={topNews} />
-            <RecommendedStories stories={recommendedStories} />
             
             <div className={styles.adSpace}>
               <div className={styles.advertisement}>ADVERTISEMENT</div>
