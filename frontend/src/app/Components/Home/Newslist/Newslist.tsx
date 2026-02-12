@@ -8,6 +8,7 @@ interface RawNewsItem {
   slug: string;
   title: string;
   summary?: string;
+  content?: string;
   image?: string;
   category: string;
   subCategory?: string;
@@ -61,7 +62,7 @@ const NewsList: React.FC = () => {
       if (!grouped.has(cat)) {
         grouped.set(cat, []);
       }
-      grouped.get(cat)!.push(item);
+      grouped.get(cat)!.push(item as RawNewsItem);
     }
 
     const selected: RawNewsItem[] = [];
@@ -71,7 +72,7 @@ const NewsList: React.FC = () => {
     }
 
     const sortedSelected = selected.sort((a, b) => {
-      return allNews.indexOf(a) - allNews.indexOf(b);
+      return allNews.indexOf(a as any) - allNews.indexOf(b as any);
     });
 
     const articles: NewsArticle[] = sortedSelected.map((item, idx) => ({
