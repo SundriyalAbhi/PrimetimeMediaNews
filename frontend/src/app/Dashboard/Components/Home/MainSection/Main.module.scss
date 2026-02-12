@@ -29,7 +29,6 @@ $danger-light: #f87171;
 $purple: #8b5cf6;
 $purple-hover: #7c3aed;
 
-// Spacing Scale
 $s-1: 0.25rem;
 $s-2: 0.5rem;
 $s-3: 0.75rem;
@@ -40,7 +39,6 @@ $s-8: 2rem;
 $s-10: 2.5rem;
 $s-12: 3rem;
 
-// Border Radius
 $rounded-sm: 0.375rem;
 $rounded-md: 0.5rem;
 $rounded-lg: 0.75rem;
@@ -48,20 +46,17 @@ $rounded-xl: 1rem;
 $rounded-2xl: 1.5rem;
 $rounded-full: 9999px;
 
-// Shadows
 $shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
 $shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
 $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 $shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
 $shadow-glow: 0 0 20px rgba(59, 130, 246, 0.4);
 
-// Transitions
 $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 $duration-fast: 150ms;
 $duration-base: 200ms;
 $duration-slow: 300ms;
 
-// === LAYOUT ===
 .wrapper {
   min-height: 100vh;
   background: linear-gradient(to bottom, $bg-primary, #020617);
@@ -77,7 +72,6 @@ $duration-slow: 300ms;
   margin: 0 auto;
 }
 
-// === TOAST NOTIFICATIONS ===
 .toast {
   position: fixed;
   top: $s-6;
@@ -143,7 +137,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === HEADER ===
 .header {
   background: $bg-card;
   border-radius: $rounded-2xl;
@@ -261,7 +254,6 @@ $duration-slow: 300ms;
   font-weight: 600;
 }
 
-// === EDITOR SECTION ===
 .editor {
   background: $bg-card;
   border-radius: $rounded-2xl;
@@ -321,7 +313,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === FORM ===
 .formGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -420,7 +411,6 @@ $duration-slow: 300ms;
   margin-top: -$s-1;
 }
 
-// === BUTTONS ===
 .formActions {
   display: flex;
   gap: $s-3;
@@ -482,7 +472,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === ARTICLES SECTION ===
 .articlesSection {
   background: $bg-card;
   border-radius: $rounded-2xl;
@@ -518,7 +507,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === SEARCH ===
 .searchBox {
   position: relative;
   flex: 1;
@@ -639,7 +627,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === GRID ===
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
@@ -679,7 +666,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === CARD ===
 .card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid $border-subtle;
@@ -922,7 +908,6 @@ $duration-slow: 300ms;
   box-shadow: 0 4px 12px rgba($danger, 0.3);
 }
 
-// === FLAG BUTTONS ===
 .flagBtn {
   padding: $s-2 $s-3;
   border-radius: $rounded-md;
@@ -957,7 +942,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === EMPTY STATE ===
 .emptyState {
   text-align: center;
   padding: $s-12;
@@ -984,7 +968,6 @@ $duration-slow: 300ms;
   filter: grayscale(1);
 }
 
-// === ERROR STATE ===
 .errorState {
   text-align: center;
   padding: $s-10;
@@ -1023,7 +1006,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === NO PERMISSION ===
 .noPermission {
   text-align: center;
   padding: $s-10;
@@ -1063,7 +1045,6 @@ $duration-slow: 300ms;
   border: 1px solid rgba($warning, 0.3);
 }
 
-// === LOADING ===
 .loading {
   display: flex;
   flex-direction: column;
@@ -1095,7 +1076,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === RESPONSIVE REFINEMENTS ===
 @media (max-width: 768px) {
   .cardActions {
     width: 100%;
@@ -1113,7 +1093,6 @@ $duration-slow: 300ms;
   }
 }
 
-// === SCROLLBAR STYLING ===
 .wrapper {
   scrollbar-width: thin;
   scrollbar-color: rgba($primary, 0.3) transparent;
@@ -1195,4 +1174,3 @@ $duration-slow: 300ms;
     background: rgba(200,0,0,0.9);
   }
 }
-
