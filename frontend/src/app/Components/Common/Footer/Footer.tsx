@@ -1,21 +1,19 @@
-import React from 'react';
-import styles from './Footer.module.scss';
+'use client'
+
+import React from 'react'
+import Link from 'next/link'
+import styles from './Footer.module.scss'
 import { 
-  FaFacebookF, 
-  FaTwitter,
-  FaInstagram, 
-  FaYoutube, 
-  FaLinkedinIn, 
-  FaWhatsapp,
-  FaChevronRight,
-  FaEnvelope,
-  FaPhone,
-  FaMapMarkerAlt,
-  FaTelegram,
-  FaRss
-} from 'react-icons/fa';
+  FaFacebookF, FaTwitter, FaInstagram, FaYoutube, 
+  FaLinkedinIn, FaWhatsapp, FaTelegram, FaRss,
+  FaEnvelope, FaPhone, FaMapMarkerAlt, FaChevronRight 
+} from 'react-icons/fa'
+import Image from 'next/image'
+import logo from "@/assets/Logo/primetimelogo.gif"
 
 const Footer: React.FC = () => {
+  const year = new Date().getFullYear()
+
   const footerLinks = {
     quickLinks: [
       { name: 'Home', href: '/' },
@@ -25,12 +23,14 @@ const Footer: React.FC = () => {
       { name: 'Careers', href: '/careers' }
     ],
     categories: [
-      { name: 'India', href: '/india' },
-      { name: 'World', href: '/world' },
-      { name: 'Business', href: '/business' },
-      { name: 'Technology', href: '/technology' },
-      { name: 'Sports', href: '/sports' },
-      { name: 'Entertainment', href: '/entertainment' }
+      { name: 'India', href: '/Pages/india' },
+      { name: 'World', href: '/Pages/world' },
+      { name: 'Business', href: '/Pages/business' },
+      { name: 'Technology', href: '/Pages/technology' },
+      { name: 'Sports', href: '/Pages/sports' },
+      { name: 'Entertainment', href: '/Pages/entertainment' },
+      { name: 'Lifestyle', href: '/Pages/lifestyle' },
+      { name: 'Health', href: '/Pages/health' }
     ],
     resources: [
       { name: 'Press Releases', href: '/press' },
@@ -38,8 +38,17 @@ const Footer: React.FC = () => {
       { name: 'Fact Check', href: '/fact-check' },
       { name: 'Archives', href: '/archives' },
       { name: 'RSS Feed', href: '/rss' }
+    ],
+    services: [
+      { name: 'Market Research', href: 'https://primetimemedia.in/market-research/' },
+      { name: 'Digital Marketing', href: 'https://primetimemedia.in/digital-marketing/' },
+      { name: 'Brand Reputation', href: 'https://primetimemedia.in/brand-reputation-management/' },
+      { name: 'Business Consultancy', href: 'https://primetimemedia.in/business-consultancy-services/' },
+      { name: 'Public Relations', href: 'https://primetimemedia.in/public-relation-management/' },
+      { name: 'Social Media Mgmt', href: 'https://primetimemedia.in/social-media-management/' },
+      { name: 'Web Development', href: 'https://primetimemedia.in/web-development/' }
     ]
-  };
+  }
 
   const socialLinks = [
     { icon: FaFacebookF, href: 'https://facebook.com', label: 'Facebook' },
@@ -47,86 +56,108 @@ const Footer: React.FC = () => {
     { icon: FaInstagram, href: 'https://instagram.com', label: 'Instagram' },
     { icon: FaYoutube, href: 'https://youtube.com', label: 'YouTube' },
     { icon: FaLinkedinIn, href: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: FaWhatsapp, href: 'https://wa.me/1234567890', label: 'WhatsApp' },
-    { icon: FaTelegram, href: 'https://telegram.me', label: 'Telegram' }
-  ];
+    { icon: FaWhatsapp, href: 'https://wa.me/9810882769', label: 'WhatsApp' },
+    { icon: FaTelegram, href: 'https://t.me/primetimenews', label: 'Telegram' },
+    { icon: FaRss, href: '/rss', label: 'RSS' }
+  ]
+
+  const contactInfo = {
+    office: 'Prime Time Research Media Pvt. Ltd, C-31, Nawada Housing Complex, New Delhi-110059',
+    phones: [
+      { number: '+91 9810 88 2769', label: 'Nominations' },
+      { number: '+91 9971 00 2984', label: 'Sponsorship' },
+      { number: '+91 9810 91 0686', label: 'Helpline' },
+      { number: '+91 11-69268754', label: 'Office' }
+    ],
+    email: 'contact@primetime.news'
+  }
 
   return (
-    <footer className={styles.footer}>
+    <footer id="footer" className={styles.footer}>
       <div className={styles.container}>
-        {/* Main Footer Content */}
         <div className={styles.grid}>
-          {/* About Section */}
           <div className={styles.section}>
             <div className={styles.logoSection}>
-              <div className={styles.logo}>
-                <div className={styles.logoCircle}>
-                  <span className={styles.logoText}>PRIME<br/>TIME</span>
-                </div>
-              </div>
+              <Image 
+                src={logo} 
+                alt="Prime Time News" 
+                className={styles.logoImg}
+                width={64}
+                height={64}
+                priority
+              />
               <h3 className={styles.brandName}>Prime Time News</h3>
               <p className={styles.tagline}>Truth in Every Story</p>
             </div>
-            
             <p className={styles.description}>
               Your trusted source for breaking news, analysis, and in-depth coverage 
               of events shaping India and the world. Stay informed, stay ahead.
             </p>
-            
             <div className={styles.contact}>
-              <a href="mailto:contact@primetime.news" className={styles.contactItem}>
+              <a href={`mailto:${contactInfo.email}`} className={styles.contactItem}>
                 <FaEnvelope className={styles.contactIcon} />
-                <span>contact@primetime.news</span>
+                <span>{contactInfo.email}</span>
               </a>
-              <a href="tel:+911234567890" className={styles.contactItem}>
-                <FaPhone className={styles.contactIcon} />
-                <span>+91 123 456 7890</span>
-              </a>
+              {contactInfo.phones.map((phone, index) => (
+                <a 
+                  key={index} 
+                  href={`tel:${phone.number.replace(/\s+/g, '')}`} 
+                  className={styles.contactItem}
+                >
+                  <FaPhone className={styles.contactIcon} />
+                  <span>{phone.number} <small>({phone.label})</small></span>
+                </a>
+              ))}
               <div className={styles.contactItem}>
                 <FaMapMarkerAlt className={styles.contactIcon} />
-                <span>New Delhi, India</span>
+                <span>{contactInfo.office}</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Links */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Quick Links</h3>
             <ul className={styles.linkList}>
               {footerLinks.quickLinks.map((link, index) => (
                 <li key={index} className={styles.linkItem}>
                   <FaChevronRight className={styles.chevron} />
-                  <a href={link.href} className={styles.link}>
-                    {link.name}
-                  </a>
+                  <Link href={link.href} className={styles.link}>{link.name}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Categories */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Categories</h3>
             <ul className={styles.linkList}>
               {footerLinks.categories.map((link, index) => (
                 <li key={index} className={styles.linkItem}>
                   <FaChevronRight className={styles.chevron} />
-                  <a href={link.href} className={styles.link}>
-                    {link.name}
-                  </a>
+                  <Link href={link.href} className={styles.link}>{link.name}</Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Resources */}
           <div className={styles.section}>
             <h3 className={styles.sectionTitle}>Resources</h3>
             <ul className={styles.linkList}>
               {footerLinks.resources.map((link, index) => (
                 <li key={index} className={styles.linkItem}>
                   <FaChevronRight className={styles.chevron} />
-                  <a href={link.href} className={styles.link}>
+                  <Link href={link.href} className={styles.link}>{link.name}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>Our Services</h3>
+            <ul className={styles.linkList}>
+              {footerLinks.services.map((link, index) => (
+                <li key={index} className={styles.linkItem}>
+                  <FaChevronRight className={styles.chevron} />
+                  <a href={link.href} target="_blank" rel="noopener noreferrer" className={styles.link}>
                     {link.name}
                   </a>
                 </li>
@@ -135,73 +166,46 @@ const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Newsletter & Social Section */}
-        <div className={styles.newsletterSection}>
-          <div className={styles.newsletterWrapper}>
-            <div className={styles.newsletterContent}>
-              <h3 className={styles.newsletterTitle}>Stay Updated</h3>
-              <p className={styles.newsletterText}>
-                Subscribe to our newsletter for the latest news and exclusive insights.
-              </p>
-            </div>
-            <form className={styles.newsletterForm}>
-              <div className={styles.inputWrapper}>
-                <FaEnvelope className={styles.inputIcon} />
-                <input 
-                  type="email" 
-                  placeholder="Enter your email address" 
-                  className={styles.newsletterInput}
-                  required
-                />
-              </div>
-              <button type="submit" className={styles.newsletterButton}>
-                Subscribe
-              </button>
-            </form>
-          </div>
-
-          <div className={styles.socialSection}>
-            <h3 className={styles.socialTitle}>Follow Us</h3>
-            <div className={styles.socialLinks}>
-              {socialLinks.map((social, index) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={index}
-                    href={social.href}
-                    className={styles.socialLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                  >
-                    <Icon />
-                  </a>
-                );
-              })}
-            </div>
+        <div className={styles.socialSection}>
+          <h3 className={styles.socialTitle}>Follow Us</h3>
+          <div className={styles.socialLinks}>
+            {socialLinks.map((social, index) => {
+              const Icon = social.icon
+              return (
+                <a
+                  key={index}
+                  href={social.href}
+                  className={styles.socialLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                >
+                  <Icon />
+                </a>
+              )
+            })}
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className={styles.bottomBar}>
           <div className={styles.bottomContent}>
             <p className={styles.copyright}>
-              © {new Date().getFullYear()} Prime Time News. All rights reserved.
+              © {year} Prime Time Research Media Pvt. Ltd. All rights reserved.
             </p>
             <div className={styles.legalLinks}>
-              <a href="/privacy" className={styles.legalLink}>Privacy Policy</a>
+              <Link href="/privacy" className={styles.legalLink}>Privacy Policy</Link>
               <span className={styles.separator}>•</span>
-              <a href="/terms" className={styles.legalLink}>Terms of Service</a>
+              <Link href="/terms" className={styles.legalLink}>Terms of Service</Link>
               <span className={styles.separator}>•</span>
-              <a href="/cookies" className={styles.legalLink}>Cookie Policy</a>
+              <Link href="/cookies" className={styles.legalLink}>Cookie Policy</Link>
               <span className={styles.separator}>•</span>
-              <a href="/disclaimer" className={styles.legalLink}>Disclaimer</a>
+              <Link href="/disclaimer" className={styles.legalLink}>Disclaimer</Link>
             </div>
           </div>
         </div>
       </div>
     </footer>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer
