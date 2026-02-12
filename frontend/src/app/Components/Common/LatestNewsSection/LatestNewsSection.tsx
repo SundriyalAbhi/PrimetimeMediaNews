@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { useNewsContext } from '@/app/context/NewsContext';
@@ -12,6 +11,7 @@ export interface LatestNewsItem {
   title: string;
   image: string;
   slug?: string;
+  subCategory?: string;
 }
 
 interface LatestNewsSectionProps {
@@ -86,6 +86,7 @@ const LatestNewsSection: React.FC<LatestNewsSectionProps> = React.memo(({
     if (newsData) {
       return newsData.slice(0, limit);
     }
+
     const data = Array.isArray(sectionData) ? sectionData.slice(0, limit) : [];
     return data.map((item: any, index) => ({
       id: `${effectiveSectionKey}-${item?.slug || index}`,
@@ -93,6 +94,7 @@ const LatestNewsSection: React.FC<LatestNewsSectionProps> = React.memo(({
       title: item?.title || 'Loading...',
       image: getImageSrc(item?.image),
       slug: item?.slug,
+      subCategory: item?.subCategory,
     }));
   }, [newsData, sectionData, effectiveSectionKey, limit]);
 
@@ -114,8 +116,16 @@ const LatestNewsSection: React.FC<LatestNewsSectionProps> = React.memo(({
 
         <div className={`${styles.newsGrid} ${styles[`cols${columns}`]}`}>
           {finalNewsData.map((item) => {
-            const categorySlug = item.category.toLowerCase().replace(/\s+/g, '-');
-            const href = `/Pages/${effectiveSectionKey}/${categorySlug}/${item.slug}`;
+            const categoryPart = item.subCategory || effectiveSectionKey || 'news';
+            const categorySlug = categoryPart
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .replace(/[^a-z0-9-]/g, '');
+
+            const href = item.slug
+              ? `/Pages/${effectiveSectionKey}/${categorySlug}/${item.slug}`
+              : '#';
+
             return (
               <Link key={item.id} href={href} className={styles.newsItem}>
                 <div className={styles.content}>

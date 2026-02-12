@@ -9,6 +9,8 @@ interface NewsItem {
   image?: string;
   category?: string;
   isLatest?: boolean;
+  section?: string;
+  subCategory?:string;
 }
 
 interface LatestNewsItem {
@@ -17,6 +19,8 @@ interface LatestNewsItem {
   title: string;
   image: string;
   slug: string;
+  section: string;
+  subCategory?:string;
 }
 
 const LatestNews: React.FC = () => {
@@ -39,24 +43,26 @@ const LatestNews: React.FC = () => {
     const latestNews: LatestNewsItem[] = [];
 
     const sections = [
-      { key: 'india', data: indiaNews as NewsItem[] | undefined },
-      { key: 'sports', data: sportsNews as NewsItem[] | undefined },
-      { key: 'business', data: businessNews as NewsItem[] | undefined },
+      { key: 'india',    data: indiaNews    },
+      { key: 'sports',   data: sportsNews   },
+      { key: 'business', data: businessNews },
     ];
 
     sections.forEach(({ key, data }) => {
       if (!data || !Array.isArray(data) || data.length === 0) return;
 
-      const latestItems = data.filter((item) => item.isLatest === true);
+      const latestItems = data.filter((item: NewsItem) => item.isLatest === true);
 
       if (latestItems.length > 0) {
         const item = latestItems[0];
         latestNews.push({
           id: `${key}-${item.slug}`,
-          category: item.category || key.toUpperCase(),
+          section: key,
+          category: item.category || key.charAt(0).toUpperCase() + key.slice(1),
           title: item.title,
           image: getImageSrc(item.image),
           slug: item.slug,
+          subCategory:item.subCategory
         });
       }
     });
@@ -106,26 +112,34 @@ const LatestNews: React.FC = () => {
         </div>
 
         <div className={styles.newsGrid}>
-          {displayNews.map((item) => (
-            <article key={item.id} className={styles.newsItem}>
-              <div className={styles.content}>
-                <span className={styles.category}>{item.category}</span>
-                <h3 className={styles.newsTitle}>
-                  <a href={`/news/${item.slug}`} className="hover:underline">
-                    {item.title}
-                  </a>
-                </h3>
-              </div>
-              <div className={styles.imageWrapper}>
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-48 object-cover rounded"
-                  loading="lazy"
-                />
-              </div>
-            </article>
-          ))}
+          {displayNews.map((item) => {
+            const categorySlug = (item.subCategory || item.section)
+              .toLowerCase()
+              .replace(/\s+/g, '-');
+
+            const href = `/Pages/${item.section}/${categorySlug}/${item.slug}`;
+
+            return (
+              <article key={item.id} className={styles.newsItem}>
+                <div className={styles.content}>
+                  <span className={styles.category}>{item.category}</span>
+                  <h3 className={styles.newsTitle}>
+                    <a href={href} className="hover:underline">
+                      {item.title}
+                    </a>
+                  </h3>
+                </div>
+                <div className={styles.imageWrapper}>
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="w-full h-48 object-cover rounded"
+                    loading="lazy"
+                  />
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         <div className={styles.readMoreWrapper}>
