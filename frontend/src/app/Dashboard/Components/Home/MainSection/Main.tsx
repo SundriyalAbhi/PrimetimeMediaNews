@@ -4,7 +4,7 @@ import { UserContext } from "@/app/Dashboard/Context/ManageUserContext";
 import { newsService, NewsItem, useNewsBySection, useAddNews, useUpdateNews, useDeleteNews, useSetNewsFlags } from "@/app/Dashboard/hooks/NewsApi";
 import styles from "./Main.module.scss";
 
-interface LatestNewsSectionProps {
+interface MainSectionProps {
   section:
     | "india"
     | "sports"
@@ -17,7 +17,7 @@ interface LatestNewsSectionProps {
     | "state";
 }
 
-const LatestNewsSection: FC<LatestNewsSectionProps> = ({ section }) => {
+const MainSection: FC<MainSectionProps> = ({ section }) => {
   const { UserAuthData } = useContext(UserContext) as any;
   const userPermissions = UserAuthData?.permissions || {};
   const userRole = UserAuthData?.role || "USER";
@@ -704,4 +704,4 @@ const LatestNewsSection: FC<LatestNewsSectionProps> = ({ section }) => {
   );
 };
 
-export default LatestNewsSection;
+export default MainSection;
