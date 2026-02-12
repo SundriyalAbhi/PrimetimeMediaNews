@@ -68,17 +68,17 @@
       transition: all 0.3s ease;
     }
 
-    .brandName {
-      font-size: 28px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.5px;
-      transition: all 0.3s ease;
-      white-space: nowrap;
-    }
+ .brandName {
+  font-size: 28px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #dc2626, #b91c1c, #991b1b, #7f1d1d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
 
     &:hover {
       transform: scale(1.04);

@@ -63,7 +63,6 @@ export default function ArticlePageClient({
   section,
   category
 }: ArticlePageClientProps) {
-  console.log('ArticlePageClient received:', article);
   
   return (
     <div className={styles.articlePage}>

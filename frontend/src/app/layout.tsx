@@ -35,15 +35,15 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <NewsProvider>
-        <Navbar />
-         <UserProvider>
-         <ToastContainer/>
-          <main>
-          {children}
-        </main>
-       </UserProvider>
-        </NewsProvider>
-        <Footer />
+            <UserProvider>
+              <Navbar />
+              <ToastContainer/>
+              <main>
+                {children}
+              </main>
+              <Footer />
+            </UserProvider>
+          </NewsProvider>
         </ThemeProvider>
       </body>
     </html>
