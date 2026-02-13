@@ -1,7 +1,8 @@
 'use client';
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useNewsContext } from '@/app/context/NewsContext';
+import { useActiveAds } from '@/app/hooks/useAds'; 
 import styles from './LifestyleSection.module.scss';
 
 interface RawLifestyleItem {
@@ -84,23 +85,6 @@ const CategoryNav: React.FC<CategoryNavProps> = React.memo(({ categories, active
 
 CategoryNav.displayName = 'CategoryNav';
 
-const AdSidebar: React.FC = React.memo(() => (
-  <aside className={styles.adSidebar} aria-label="Advertisement">
-    <span className={styles.adLabel}>ADVERTISEMENT</span>
-    <div className={styles.adFrame}>
-      <div className={styles.adPlaceholder}>
-        <svg width="280" height="220" viewBox="0 0 280 220" fill="none" aria-hidden="true">
-          <rect width="280" height="220" rx="8" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 193, 7, 0.3)" strokeWidth="2"/>
-          <text x="140" y="110" textAnchor="middle" fill="#ffc107" fontSize="16" fontWeight="600">Event Sponsor</text>
-          <text x="140" y="135" textAnchor="middle" fill="#ffc107" fontSize="12">300x250</text>
-        </svg>
-      </div>
-    </div>
-  </aside>
-));
-
-AdSidebar.displayName = 'AdSidebar';
-
 const LoadingSkeleton: React.FC = () => (
   <div className={styles.container}>
     <h2 className={styles.mainTitle}>Lifestyle</h2>
@@ -133,6 +117,21 @@ const LifestyleSection: React.FC = () => {
   const router = useRouter();
   const { lifestyleNews, loading } = useNewsContext();
   
+  const { data: adsData, loading: adsLoading } = useActiveAds();
+  const activeAds = (adsData || []).filter(ad => ad.isActive);
+
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
+
+  useEffect(() => {
+    if (activeAds.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setCurrentAdIndex(prev => (prev + 1) % activeAds.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [activeAds.length]);
+
   const availableCategories = useMemo(() => {
     if (!lifestyleNews?.length) return [];
 
@@ -192,6 +191,94 @@ const LifestyleSection: React.FC = () => {
   const handleReadMoreClick = useCallback(() => {
     router.push('/Pages/lifestyle');
   }, [router]);
+
+  const renderAd = () => {
+    if (adsLoading) {
+      return (
+        <div className={styles.adPlaceholder} style={{ height: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ color: '#6b7280', fontSize: '14px' }}>Loading advertisement...</span>
+        </div>
+      );
+    }
+
+    if (activeAds.length === 0) {
+      return (
+        <div className={styles.adPlaceholder} style={{ height: '280px' }}>
+          <svg width="280" height="220" viewBox="0 0 280 220" fill="none" aria-hidden="true">
+            <rect width="280" height="220" rx="8" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 193, 7, 0.3)" strokeWidth="2"/>
+            <text x="140" y="110" textAnchor="middle" fill="#ffc107" fontSize="16" fontWeight="600">AD SPACE</text>
+            <text x="140" y="135" textAnchor="middle" fill="#ffc107" fontSize="12">300×250</text>
+          </svg>
+        </div>
+      );
+    }
+
+    const ad = activeAds[currentAdIndex % activeAds.length];
+
+    return (
+      <div className={styles.adFrame} style={{ height: '280px', position: 'relative', overflow: 'hidden', borderRadius: '8px' }}>
+        <a
+          href={ad.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ display: 'block', height: '100%' }}
+        >
+          <img
+            src={ad.imageUrl}
+            alt={ad.title || 'Advertisement'}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transition: 'transform 0.4s ease'
+            }}
+            loading="lazy"
+          />
+          {ad.title && (
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              background: 'rgba(0,0,0,0.6)',
+              color: 'white',
+              padding: '10px 12px',
+              fontSize: '13px',
+              textAlign: 'center',
+              fontWeight: 500,
+            }}>
+              {ad.title}
+            </div>
+          )}
+        </a>
+
+        {activeAds.length > 1 && (
+          <div style={{
+            position: 'absolute',
+            bottom: '12px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '8px',
+            zIndex: 2,
+          }}>
+            {activeAds.map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  width: '9px',
+                  height: '9px',
+                  borderRadius: '50%',
+                  background: i === currentAdIndex % activeAds.length ? '#ffffff' : 'rgba(255,255,255,0.5)',
+                  transition: 'all 0.3s',
+                }}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  };
 
   if (loading) {
     return (
@@ -255,7 +342,10 @@ const LifestyleSection: React.FC = () => {
             <EmptyState message={`No articles found for ${activeTab}`} />
           )}
 
-          <AdSidebar />
+          <aside className={styles.adSidebar} aria-label="Advertisement">
+            <span className={styles.adLabel}>ADVERTISEMENT</span>
+            {renderAd()}
+          </aside>
         </div>
 
         {lifestyleArticles.length > 0 && (

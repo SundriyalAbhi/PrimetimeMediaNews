@@ -37,7 +37,7 @@ export default function Home() {
       {/* <NewsCards data={stateNewsData} columns={3} /> */}
       {/* <HeroSection/> */}
             <SocialShare 
-        url={typeof window !== 'undefined' ? window.location.href : 'https://yoursite.com'}
+        url={typeof window !== 'undefined' ? window.location.href : 'https://primetime-media-news.vercel.app/'}
         title="Your News Site - Latest Breaking News & Updates"
         description="Get the latest breaking news, sports updates, entertainment stories, lifestyle tips, and more. Your trusted source for news."
         image="/og-image.jpg" 
