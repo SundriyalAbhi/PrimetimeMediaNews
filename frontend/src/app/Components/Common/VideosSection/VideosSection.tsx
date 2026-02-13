@@ -128,90 +128,52 @@ export const VideosSection: React.FC = () => {
             ))}
           </div>
 
-          <div className={styles.adBlock}>
+          <aside className={styles.adBlock}>
             <span className={styles.adLabel}>ADVERTISEMENT</span>
-            
+
             {adsLoading ? (
-              <div className={styles.adImageWrapper} style={{ height: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f3f4f6', color: '#6b7280' }}>
-                Loading ad...
+              <div className={styles.adPlaceholder}>
+                <span>Loading advertisement...</span>
               </div>
             ) : activeAds.length > 0 ? (
-              <div className={styles.adImageWrapper} style={{ position: 'relative', height: '250px', overflow: 'hidden', borderRadius: '12px' }}>
-                {activeAds.map((ad, index) => (
-                  <a
-                    key={ad._id}
-                    href={ad.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      opacity: index === currentAdIndex ? 1 : 0,
-                      transition: 'opacity 0.8s ease-in-out',
-                      pointerEvents: index === currentAdIndex ? 'auto' : 'none',
-                    }}
-                  >
-                    <img
-                      src={ad.imageUrl}
-                      alt={ad.title || 'Advertisement'}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                    {ad.title && (
-                      <div style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        background: 'rgba(0,0,0,0.65)',
-                        color: 'white',
-                        padding: '10px 12px',
-                        fontSize: '13px',
-                        textAlign: 'center',
-                        fontWeight: 500,
-                      }}>
-                        {ad.title}
-                      </div>
-                    )}
-                  </a>
-                ))}
+              <div className={styles.adWrapper}>
+                <a
+                  href={activeAds[currentAdIndex].link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.adLink}
+                >
+                  <img
+                    src={activeAds[currentAdIndex].imageUrl}
+                    alt={activeAds[currentAdIndex].title || 'Advertisement'}
+                    className={styles.adImage}
+                    loading="lazy"
+                  />
+                </a>
 
                 {activeAds.length > 1 && (
-                  <div style={{
-                    position: 'absolute',
-                    bottom: '12px',
-                    left: 0,
-                    right: 0,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    zIndex: 2,
-                  }}>
+                  <div className={styles.adDots}>
                     {activeAds.map((_, idx) => (
                       <button
                         key={idx}
                         onClick={() => setCurrentAdIndex(idx)}
-                        style={{
-                          width: '10px',
-                          height: '10px',
-                          borderRadius: '50%',
-                          background: idx === currentAdIndex ? '#ffffff' : 'rgba(255,255,255,0.5)',
-                          border: 'none',
-                          cursor: 'pointer',
-                          transform: idx === currentAdIndex ? 'scale(1.3)' : 'scale(1)',
-                          transition: 'all 0.3s',
-                        }}
+                        className={`${styles.dot} ${idx === currentAdIndex ? styles.activeDot : ''}`}
                         aria-label={`Ad ${idx + 1}`}
                       />
                     ))}
                   </div>
                 )}
+
               </div>
             ) : (
-              <div className={styles.adImageWrapper} style={{ height: '250px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f3f4f6', color: '#6b7280', fontSize: '14px' }}>
-                Advertisement space available
+              <div className={styles.adPlaceholder}>
+                <div className={styles.emptyAdBox}>
+                  <span>AD SPACE</span>
+                  <small>Adjusts to image size</small>
+                </div>
               </div>
             )}
-          </div>
+          </aside>
         </div>
 
         <div className={styles.footerAction}>

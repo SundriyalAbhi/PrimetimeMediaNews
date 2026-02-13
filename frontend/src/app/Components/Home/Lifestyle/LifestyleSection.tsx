@@ -151,7 +151,7 @@ const LifestyleSection: React.FC = () => {
     availableCategories[0] || 'Food'
   );
 
-  useMemo(() => {
+  useEffect(() => {
     if (availableCategories.length > 0 && !availableCategories.includes(activeTab)) {
       setActiveTab(availableCategories[0]);
     }
@@ -195,20 +195,19 @@ const LifestyleSection: React.FC = () => {
   const renderAd = () => {
     if (adsLoading) {
       return (
-        <div className={styles.adPlaceholder} style={{ height: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <span style={{ color: '#6b7280', fontSize: '14px' }}>Loading advertisement...</span>
+        <div className={styles.adPlaceholder}>
+          <span>Loading advertisement...</span>
         </div>
       );
     }
 
     if (activeAds.length === 0) {
       return (
-        <div className={styles.adPlaceholder} style={{ height: '280px' }}>
-          <svg width="280" height="220" viewBox="0 0 280 220" fill="none" aria-hidden="true">
-            <rect width="280" height="220" rx="8" fill="rgba(255, 255, 255, 0.1)" stroke="rgba(255, 193, 7, 0.3)" strokeWidth="2"/>
-            <text x="140" y="110" textAnchor="middle" fill="#ffc107" fontSize="16" fontWeight="600">AD SPACE</text>
-            <text x="140" y="135" textAnchor="middle" fill="#ffc107" fontSize="12">300×250</text>
-          </svg>
+        <div className={styles.adPlaceholder}>
+          <div className={styles.emptyAdBox}>
+            <span>AD SPACE</span>
+            <small>Will adjust to image size</small>
+          </div>
         </div>
       );
     }
@@ -216,62 +215,27 @@ const LifestyleSection: React.FC = () => {
     const ad = activeAds[currentAdIndex % activeAds.length];
 
     return (
-      <div className={styles.adFrame} style={{ height: '280px', position: 'relative', overflow: 'hidden', borderRadius: '8px' }}>
+      <div className={styles.adWrapper}>
         <a
           href={ad.link}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: 'block', height: '100%' }}
+          className={styles.adLink}
         >
           <img
             src={ad.imageUrl}
             alt={ad.title || 'Advertisement'}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transition: 'transform 0.4s ease'
-            }}
+            className={styles.adImage}
             loading="lazy"
           />
-          {ad.title && (
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'rgba(0,0,0,0.6)',
-              color: 'white',
-              padding: '10px 12px',
-              fontSize: '13px',
-              textAlign: 'center',
-              fontWeight: 500,
-            }}>
-              {ad.title}
-            </div>
-          )}
         </a>
 
         {activeAds.length > 1 && (
-          <div style={{
-            position: 'absolute',
-            bottom: '12px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: '8px',
-            zIndex: 2,
-          }}>
+          <div className={styles.adDots}>
             {activeAds.map((_, i) => (
               <div
                 key={i}
-                style={{
-                  width: '9px',
-                  height: '9px',
-                  borderRadius: '50%',
-                  background: i === currentAdIndex % activeAds.length ? '#ffffff' : 'rgba(255,255,255,0.5)',
-                  transition: 'all 0.3s',
-                }}
+                className={`${styles.dot} ${i === currentAdIndex % activeAds.length ? styles.activeDot : ''}`}
               />
             ))}
           </div>

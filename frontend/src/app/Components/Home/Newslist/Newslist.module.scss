@@ -5,36 +5,11 @@
   background-color: var(--background);
   padding: 3rem 2rem;
   position: relative;
-  overflow: hidden;
-  transition: background-color 0.3s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(180deg, transparent, var(--border) 50%, transparent);
-    pointer-events: none;
-  }
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
-  position: relative;
-  z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
   gap: 3rem;
@@ -66,28 +41,11 @@
   box-shadow: 0 2px 8px var(--shadow-color);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 0;
-    background: linear-gradient(180deg, var(--primary), var(--accent));
-    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1;
-  }
 
   &:hover {
     transform: translateY(-4px);
     border-color: var(--accent);
     box-shadow: 0 8px 20px var(--shadow-color);
-
-    &::before {
-      height: 100%;
-    }
   }
 }
 
@@ -121,14 +79,6 @@
   svg {
     display: block;
   }
-
-  circle {
-    fill: rgba(239, 68, 68, 0.95);
-  }
-
-  path {
-    fill: #ffffff;
-  }
 }
 
 .cardContent {
@@ -154,13 +104,6 @@
   background: var(--nav-hover-bg);
   border: 1px solid var(--primary);
   border-radius: 100px;
-  transition: all 0.3s ease;
-
-  .newsCard:hover & {
-    background: var(--nav-hover-bg);
-    border-color: var(--primary);
-    color: var(--primary-hover);
-  }
 }
 
 .opinionBadge {
@@ -190,7 +133,6 @@
   font-size: 1.125rem;
   line-height: 1.5;
   color: var(--heading-color);
-  transition: color 0.3s ease;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
@@ -202,11 +144,11 @@
   }
 }
 
-// Sidebar Styles
+
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 2.5rem;
 }
 
 .trendingSection {
@@ -215,21 +157,6 @@
   border: 1px solid var(--card-border);
   box-shadow: 0 4px 12px var(--shadow-color);
   padding: 2rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary), var(--accent), #ec4899);
-    background-size: 200% 100%;
-    animation: shimmer 4s linear infinite;
-  }
 }
 
 .trendingHeader {
@@ -243,9 +170,6 @@
   font-size: 2rem;
   color: var(--heading-color);
   letter-spacing: -0.02em;
-  position: relative;
-  display: inline-block;
-  transition: color 0.3s ease;
 }
 
 .trendingAccent {
@@ -275,7 +199,6 @@
   cursor: pointer;
 
   &:hover {
-    background: var(--nav-hover-bg);
     border-color: var(--primary);
     transform: translateX(4px);
     box-shadow: -2px 4px 16px var(--shadow-color);
@@ -295,14 +218,6 @@
   font-weight: 700;
   font-size: 1.25rem;
   color: var(--primary);
-  flex-shrink: 0;
-  transition: all 0.3s ease;
-
-  .trendingCard:hover & {
-    background: var(--nav-hover-bg);
-    border-color: var(--primary-hover);
-    transform: scale(1.08);
-  }
 }
 
 .trendingImage {
@@ -311,14 +226,13 @@
   border-radius: 10px;
   overflow: hidden;
   background: var(--muted);
-  flex-shrink: 0;
   border: 1px solid var(--border);
 
   img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.4s ease;
   }
 
   .trendingCard:hover & img {
@@ -331,38 +245,20 @@
   font-weight: 500;
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: var(--text-color);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  transition: color 0.3s ease;
-
-  .trendingCard:hover & {
-    color: var(--heading-color);
-  }
 }
 
-// Advertisement Space
+────────────────────────────────────────────
+
 .adSpace {
   background: var(--card-bg);
   border-radius: 16px;
   border: 1px solid var(--card-border);
   box-shadow: 0 2px 8px var(--shadow-color);
   padding: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 320px;
-  transition: all 0.3s ease;
-}
-
-.adContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-  text-align: center;
 }
 
 .adLabel {
@@ -372,162 +268,126 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted-foreground);
-  transition: color 0.3s ease;
+  display: block;
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.adWrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: transparent;
+  line-height: 0;
+}
+
+.adLink {
+  display: block;
+  line-height: 0;
+}
+
+.adImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.adWrapper:hover .adImage {
+  transform: scale(1.03);
+}
+
+.adTitleOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.65);
+  color: white;
+  padding: 10px 14px;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.adDots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.activeDot {
+  background: #ffffff;
+  transform: scale(1.3);
 }
 
 .adPlaceholder {
+  width: 100%;
+  min-height: 160px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 220px;
-  height: 220px;
-  background: var(--nav-hover-bg);
-  border-radius: 16px;
+  background: var(--muted);
   border: 2px dashed var(--primary);
+  border-radius: 12px;
+  color: #6b7280;
+  font-size: 14px;
+}
 
-  svg {
-    circle {
-      stroke: var(--primary);
-    }
+.emptyAdBox {
+  text-align: center;
+  color: #9ca3af;
+  padding: 2rem 1rem;
 
-    text {
-      fill: var(--primary);
-    }
+  span {
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  small {
+    font-size: 0.8rem;
   }
 }
 
-// Animations
+
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.8;
-    transform: scale(0.95);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.8; transform: scale(0.95); }
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-// Loading States
-.newsCard.animate-pulse,
-.trendingSection.animate-pulse {
-  animation: pulse-bg 1.5s ease-in-out infinite;
-  
-  .bg-gray-200 {
-    background: linear-gradient(90deg, var(--muted) 0%, var(--border) 50%, var(--muted) 100%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s linear infinite;
-  }
-}
-
-@keyframes pulse-bg {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.85;
-  }
-}
-
-// Responsive
 @media (max-width: 1023px) {
-  .newsListSection {
-    padding: 2rem 1.5rem;
-  }
-
-  .container {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-
-  .newsGrid {
-    gap: 1.75rem;
-  }
-
-  .trendingSection {
-    padding: 1.75rem;
-  }
-
-  .trendingTitle {
-    font-size: 1.75rem;
-  }
+  .newsListSection { padding: 2rem 1.5rem; }
+  .container       { grid-template-columns: 1fr; gap: 2.5rem; }
 }
 
 @media (max-width: 639px) {
-  .newsListSection {
-    padding: 2rem 1rem;
-  }
-
-  .newsGrid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .cardImage {
-    height: 180px;
-  }
-
-  .cardContent {
-    padding: 1.25rem;
-  }
-
-  .cardTitle {
-    font-size: 1rem;
-  }
-
-  .trendingSection {
-    padding: 1.5rem;
-  }
-
-  .trendingTitle {
-    font-size: 1.5rem;
-  }
-
-  .trendingCard {
-    grid-template-columns: 40px 75px 1fr;
-    gap: 0.875rem;
-    padding: 0.875rem;
-  }
-
-  .trendingRank {
-    width: 40px;
-    height: 40px;
-    font-size: 1.125rem;
-  }
-
-  .trendingImage {
-    width: 75px;
-    height: 56px;
-  }
-
-  .trendingText {
-    font-size: 0.875rem;
-  }
-
-  .adSpace {
-    min-height: 280px;
-    padding: 1.5rem;
-  }
-
-  .adPlaceholder {
-    width: 180px;
-    height: 180px;
-  }
-}
-
-.adSpace {
-  margin-top: 2rem;
-}
-
-.adContent:hover img {
-  transform: scale(1.03);
+  .newsListSection { padding: 2rem 1rem; }
+  .newsGrid        { grid-template-columns: 1fr; gap: 1.5rem; }
+  .cardImage       { height: 180px; }
+  .cardTitle       { font-size: 1rem; }
+  .trendingSection { padding: 1.5rem; }
+  .trendingTitle   { font-size: 1.5rem; }
+  .trendingCard    { grid-template-columns: 40px 75px 1fr; gap: 0.875rem; }
+  .trendingRank    { width: 40px; height: 40px; font-size: 1.125rem; }
+  .trendingImage   { width: 75px; height: 56px; }
 }

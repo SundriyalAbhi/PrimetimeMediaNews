@@ -89,93 +89,56 @@ export default function ArticlePageClient({
     return () => clearInterval(interval);
   }, [activeAds.length]);
 
-  const renderAd = (index: number, minHeight = '250px') => {
+  const renderAd = (index: number) => {
     if (adsLoading) {
       return (
-        <div className={styles.adPlaceholder} style={{ height: minHeight }}>
-          Loading advertisement...
+        <div className={styles.adPlaceholder}>
+          <span>Loading advertisement...</span>
         </div>
       );
     }
 
     if (activeAds.length === 0) {
       return (
-        <div className={styles.adPlaceholder} style={{ height: minHeight }}>
-          Advertisement space
+        <div className={styles.adPlaceholder}>
+          <div className={styles.emptyAdBox}>
+            <span>AD SPACE</span>
+            <small>Will adjust to image size</small>
+          </div>
         </div>
       );
     }
 
     const ad = activeAds[index % activeAds.length];
-    const adUrl = normalizeUrl(ad.link);
-    
+
     return (
-      <div style={{ 
-        position: 'relative', 
-        height: minHeight, 
-        borderRadius: '12px', 
-        overflow: 'hidden',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-      }}>
+      <div className={styles.adWrapper}>
         <a
-          href={adUrl}
+          href={normalizeUrl(ad.link)}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: 'block', height: '100%' }}
-          onClick={(e) => {
-            e.preventDefault();
-            window.open(adUrl, '_blank', 'noopener,noreferrer');
-          }}
+          className={styles.adLink}
         >
           <img
             src={ad.imageUrl}
             alt={ad.title || 'Advertisement'}
-            style={{ 
-              width: '100%', 
-              height: '100%', 
-              objectFit: 'cover',
-              transition: 'transform 0.4s ease'
-            }}
+            className={styles.adImage}
+            loading="lazy"
           />
-          {ad.title && (
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'rgba(0,0,0,0.65)',
-              color: 'white',
-              padding: '10px 12px',
-              fontSize: '13px',
-              textAlign: 'center',
-              fontWeight: 500,
-            }}>
-              {ad.title}
-            </div>
-          )}
         </a>
 
+
         {activeAds.length > 1 && (
-          <div style={{
-            position: 'absolute',
-            bottom: '10px',
-            left: 0,
-            right: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '8px',
-            zIndex: 2,
-          }}>
+          <div className={styles.adDots}>
             {activeAds.map((_, i) => (
-              <div
+              <button
                 key={i}
-                style={{
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  background: i === (index % activeAds.length) ? '#ffffff' : 'rgba(255,255,255,0.5)',
-                  transition: 'all 0.3s',
+                onClick={() => {
+                  if (index === topAdIndex) setTopAdIndex(i);
+                  else setBottomAdIndex(i);
                 }}
+                className={`${styles.dot} ${i === (index % activeAds.length) ? styles.activeDot : ''}`}
+                aria-label={`Ad ${i + 1}`}
               />
             ))}
           </div>
@@ -202,14 +165,14 @@ export default function ArticlePageClient({
               <ArticleTags tags={article.tags} />
             )}
             <div className={styles.shareSection}>
-    <SocialShare 
-    url={typeof window !== 'undefined' ? window.location.href : `https://yoursite.com/${article.section}/${article.category}/${article.slug}`}
-    title={article.title}
-    description={article.subtitle}
-    image={article.image}
-    isArticle={true}
-  />
-  </div>
+              <SocialShare 
+                url={typeof window !== 'undefined' ? window.location.href : `https://yoursite.com/${article.section}/${article.category}/${article.slug}`}
+                title={article.title}
+                description={article.subtitle}
+                image={article.image}
+                isArticle={true}
+              />
+            </div>
           </div>
 
           <aside className={styles.sidebar}>
@@ -222,7 +185,7 @@ export default function ArticlePageClient({
             
             <div className={styles.adSpace}>
               <div className={styles.advertisement}>ADVERTISEMENT</div>
-              {renderAd(bottomAdIndex, '300px')}
+              {renderAd(bottomAdIndex)}
             </div>
           </aside>
         </div>

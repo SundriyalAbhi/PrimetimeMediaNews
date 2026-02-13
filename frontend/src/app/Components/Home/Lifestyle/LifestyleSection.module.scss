@@ -222,36 +222,102 @@
   position: sticky;
   top: 20px;
   transition: all 0.3s ease;
+  width: 100%;
+  max-width: 400px;
+  align-self: start;
+}
 
-  .adLabel {
-    display: block;
-    text-align: center;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.625rem;
+.adWrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: transparent;
+  line-height: 0;
+}
+
+.adLink {
+  display: block;
+  line-height: 0;
+}
+
+.adImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.adWrapper:hover .adImage {
+  transform: scale(1.03);
+}
+
+.adDots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  transition: all 0.3s;
+}
+
+.activeDot {
+  background: #ffffff;
+  transform: scale(1.2);
+}
+
+.adPlaceholder {
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  font-size: 14px;
+  background: rgba(0,0,0,0.03);
+  border-radius: 12px;
+  border: 1px dashed #d1d5db;
+}
+
+.emptyAdBox {
+  text-align: center;
+  color: #9ca3af;
+  padding: 2rem 1rem;
+
+  span {
     font-weight: 600;
-    color: var(--muted-foreground);
-    margin-bottom: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    transition: color 0.3s ease;
+    font-size: 1.1rem;
+    display: block;
+    margin-bottom: 0.5rem;
   }
 
-  .adFrame {
-    background: var(--muted);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-
-    img {
-      width: 100%;
-      display: block;
-      transition: transform 0.3s ease;
-    }
-
-    &:hover img {
-      transform: scale(1.02);
-    }
+  small {
+    font-size: 0.8rem;
   }
+}
+
+.adLabel {
+  display: block;
+  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: var(--muted-foreground);
+  margin-top: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: color 0.3s ease;
 }
 
 .footerAction {
@@ -288,10 +354,6 @@
       transition: left 0.5s ease;
     }
 
-    svg {
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
     &:hover {
       background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary) 100%);
       border-color: var(--primary-hover);
@@ -300,10 +362,6 @@
 
       &::before {
         left: 100%;
-      }
-
-      svg {
-        transform: translateX(4px);
       }
     }
 
@@ -440,8 +498,4 @@
     padding: 0.625rem 1.5rem;
     font-size: 0.8125rem;
   }
-}
-.adSidebar:hover img {
-  transform: scale(1.03);
-  transition: transform 0.4s ease;
 }

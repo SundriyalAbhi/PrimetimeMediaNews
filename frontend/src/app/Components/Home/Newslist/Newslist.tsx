@@ -125,7 +125,7 @@ const NewsList: React.FC = () => {
     if (adsLoading) {
       return (
         <div className={styles.adPlaceholder}>
-          <div style={{ fontSize: '14px', color: '#6b7280' }}>Loading advertisement...</div>
+          <span>Loading advertisement...</span>
         </div>
       );
     }
@@ -133,10 +133,10 @@ const NewsList: React.FC = () => {
     if (activeAds.length === 0) {
       return (
         <div className={styles.adPlaceholder}>
-          <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-            <circle cx="40" cy="40" r="30" stroke="rgba(255, 153, 0, 0.3)" strokeWidth="2" strokeDasharray="4 4" />
-            <text x="40" y="45" textAnchor="middle" fill="rgba(255, 153, 0, 0.5)" fontSize="12" fontWeight="600">AD SPACE</text>
-          </svg>
+          <div className={styles.emptyAdBox}>
+            <span>AD SPACE</span>
+            <small>Will adjust to image size</small>
+          </div>
         </div>
       );
     }
@@ -144,69 +144,30 @@ const NewsList: React.FC = () => {
     const currentAd = activeAds[adIndex % activeAds.length];
 
     return (
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '280px',
-        borderRadius: '12px',
-        overflow: 'hidden',
-        background: '#f3f4f6',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
-      }}>
+      <div className={styles.adWrapper}>
         <a
           href={currentAd.link}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ display: 'block', height: '100%' }}
+          className={styles.adLink}
         >
           <img
             src={currentAd.imageUrl}
             alt={currentAd.title || "Advertisement"}
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transition: 'transform 0.4s ease'
-            }}
+            className={styles.adImage}
+            loading="lazy"
           />
-          {currentAd.title && (
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              background: 'rgba(0,0,0,0.65)',
-              color: 'white',
-              padding: '10px 14px',
-              fontSize: '13px',
-              textAlign: 'center',
-              fontWeight: 500,
-            }}>
-              {currentAd.title}
-            </div>
-          )}
         </a>
 
+
         {activeAds.length > 1 && (
-          <div style={{
-            position: 'absolute',
-            bottom: '12px',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            gap: '8px',
-            zIndex: 2,
-          }}>
+          <div className={styles.adDots}>
             {activeAds.map((_, i) => (
-              <div
+              <button
                 key={i}
-                style={{
-                  width: '9px',
-                  height: '9px',
-                  borderRadius: '50%',
-                  background: i === (adIndex % activeAds.length) ? '#ffffff' : 'rgba(255,255,255,0.45)',
-                  transition: 'all 0.3s ease',
-                }}
+                onClick={() => setAdIndex(i)}
+                className={`${styles.dot} ${i === adIndex % activeAds.length ? styles.activeDot : ''}`}
+                aria-label={`Ad ${i + 1}`}
               />
             ))}
           </div>
@@ -329,10 +290,8 @@ const NewsList: React.FC = () => {
           </div>
 
           <div className={styles.adSpace}>
-            <div className={styles.adContent}>
-              <span className={styles.adLabel}>ADVERTISEMENT</span>
-              {renderAd()}
-            </div>
+            <span className={styles.adLabel}>ADVERTISEMENT</span>
+            {renderAd()}
           </div>
         </aside>
       </div>
