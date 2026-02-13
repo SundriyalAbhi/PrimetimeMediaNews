@@ -7,141 +7,169 @@
   position: relative;
   overflow: hidden;
   transition: background-color 0.3s ease;
+}
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.articleLayout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  margin-top: 1.25rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
+}
 
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: 
-      repeating-linear-gradient(0deg, transparent, transparent 2px, var(--border) 2px, var(--border) 4px);
-    opacity: 0.3;
-    pointer-events: none;
-    z-index: 0;
+.mainContent {
+  background: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px var(--shadow-color), 0 4px 16px var(--shadow-color);
+  border: 1px solid var(--card-border);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    border-radius: 12px;
   }
+}
 
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1.25rem;
-    position: relative;
-    z-index: 1;
-  }
-
-  .articleLayout {
+.sidebar {
+  @media (max-width: 1024px) {
     display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 2rem;
-    margin-top: 1.25rem;
-
-    @media (max-width: 1024px) {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-    }
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
   }
+}
 
-  .mainContent {
-    background: var(--card-bg);
-    padding: 2.5rem;
-    border-radius: 16px;
-    box-shadow: 0 2px 8px var(--shadow-color), 0 4px 16px var(--shadow-color);
-    border: 1px solid var(--card-border);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+.adSpace {
+  margin-bottom: 1.5rem;
+  position: sticky;
+  top: 2rem;
+
+  @media (max-width: 1024px) {
     position: relative;
-    
-    @media (max-width: 768px) {
-      padding: 1.5rem;
-      border-radius: 12px;
-    }
+    top: 0;
   }
 
-  .sidebar {
-    @media (max-width: 1024px) {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
-    }
-  }
-
-  .adSpace {
-    margin-bottom: 1.5rem;
-    position: sticky;
-    top: 2rem;
-
-    @media (max-width: 1024px) {
-      position: relative;
-      top: 0;
-    }
-
-    .advertisement {
-      text-align: center;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.6875rem;
-      color: var(--muted-foreground);
-      margin-bottom: 0.5rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-weight: 600;
-      transition: color 0.3s ease;
-    }
-
-    .adPlaceholder {
-      width: 100%;
-      height: 250px;
-      background: var(--muted);
-      border: 2px dashed var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted-foreground);
-      font-family: 'Inter', sans-serif;
-      font-size: 0.875rem;
-      font-weight: 500;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-
-      &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: var(--nav-hover-bg);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      &:hover {
-        border-color: var(--accent);
-        
-        &::before {
-          opacity: 1;
-        }
-      }
-    }
+  .advertisement {
+    text-align: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.6875rem;
+    color: var(--muted-foreground);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
   }
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
+.adWrapper {
+  position: relative;
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: transparent;
+  line-height: 0;
 }
-.adSpace > div:not(.advertisement):hover img {
+
+.adLink {
+  display: block;
+  line-height: 0;
+}
+
+.adImage {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.adWrapper:hover .adImage {
   transform: scale(1.03);
+}
+
+.adTitleOverlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0,0,0,0.65);
+  color: white;
+  padding: 10px 12px;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 500;
+  z-index: 1;
+}
+
+.adDots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.activeDot {
+  background: #ffffff;
+  transform: scale(1.3);
+}
+
+.adPlaceholder {
+  width: 100%;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--muted);
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  color: var(--muted-foreground);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.emptyAdBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  span {
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  small {
+    font-size: 0.8125rem;
+    color: #9ca3af;
+  }
 }
 
 .shareSection {
@@ -149,4 +177,8 @@
   padding: 16px 0;
   border-top: 1px solid #e5e7eb;
   border-bottom: 1px solid #e5e7eb;
+}
+
+.adSpace > div:not(.advertisement):hover img {
+  transform: scale(1.03);
 }

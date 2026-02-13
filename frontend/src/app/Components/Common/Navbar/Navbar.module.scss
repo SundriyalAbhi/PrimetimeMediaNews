@@ -19,64 +19,94 @@
 
 .adBanner {
   width: 100%;
-  height: 80px;
+  min-height: 90px;
+  margin: 0 auto 1rem auto;
   position: relative;
   overflow: hidden;
   border-bottom: 1px solid var(--nav-border);
-  background: rgba(240, 240, 240, 0.08);
+  background: rgba(240, 240, 240, 0.06);
+  padding: 0.5rem 0;
+  @media (min-width: 768px) {
+    width: 76%;
+    max-width: 970px;
+  }
+  @media (max-width: 767px) {
+    width: 94%;
+    max-width: none;
+    min-height: 100px;
+  }
 }
 
 .adLink {
   display: block;
   width: 100%;
   height: 100%;
+  text-decoration: none;
 }
 
 .adImageWrapper {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: 0;
+  padding-bottom: 25%;
+  overflow: hidden;
+  background: rgba(0,0,0,0.04);
+  @media (min-width: 768px) {
+    max-height: 420px;
+    padding-bottom: unset;
+    height: auto;
+    min-height: 90px;
+  }
 }
 
 .adImage {
   object-fit: contain !important;
+  object-position: center;
+  transition: transform 0.35s ease;
+}
+
+.adBanner:hover .adImage {
+  transform: scale(1.015);
 }
 
 .adLoading,
 .adPlaceholder {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(200, 200, 200, 0.08);
-  border: 1px dashed var(--nav-border);
   color: var(--nav-text-secondary);
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 0.95rem;
+  background: rgba(200,200,200,0.06);
+  border: 1px dashed var(--nav-border);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
 }
 
 .adDots {
   position: absolute;
-  bottom: 12px;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 8px;
-  z-index: 10;
+  gap: 9px;
+  z-index: 5;
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255,255,255,0.55);
   border: none;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.28s ease;
   &.active {
-    background: #fff;
-    transform: scale(1.3);
+    background: white;
+    transform: scale(1.35);
+    box-shadow: 0 0 6px rgba(255,255,255,0.7);
   }
 }
 

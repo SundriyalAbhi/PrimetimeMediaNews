@@ -114,7 +114,7 @@ const Navbar: React.FC = () => {
                   src={currentAd.imageUrl}
                   alt={currentAd.title || "Advertisement"}
                   fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 970px, 970px"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 970px"
                   className={styles.adImage}
                   priority={currentAdIndex === 0}
                 />
@@ -122,7 +122,7 @@ const Navbar: React.FC = () => {
             </a>
           ) : (
             <div className={styles.adPlaceholder}>
-              Advertisement Space – 970×250 Billboard
+              Advertisement Space – Recommended 970×250 / 728×90
             </div>
           )}
 
@@ -160,7 +160,7 @@ const Navbar: React.FC = () => {
                 height={48}
                 priority
               />
-              <span className={styles.brandName}>Prime Time Media</span>
+              <span className={styles.brandName}>Prime Time</span>
             </Link>
           </div>
 
