@@ -53,7 +53,6 @@ export default function CategoryPage() {
 
     const filtered = context.allNews.filter((news) => {
       const newsCategory = news.category?.toLowerCase() || '';
-      console.log(newsCategory);
       
       const urlCategory = category.toLowerCase();
       
