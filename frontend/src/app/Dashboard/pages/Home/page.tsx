@@ -15,7 +15,7 @@ const sections = [
   { id: 'lifestyle' as const, label: 'Lifestyle', icon: '✨' },
   { id: 'world' as const, label: 'World', icon: '🌍' },
   { id: 'health' as const, label: 'Health', icon: '🏥' },
-  { id: 'state' as const, label: 'State', icon: '📰' },
+  { id: 'awards' as const, label: 'Awards', icon: '🏆' },
 ] as const;
 
 type SectionId = typeof sections[number]['id'];

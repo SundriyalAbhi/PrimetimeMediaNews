@@ -16,7 +16,7 @@ interface MainSectionProps {
     | "lifestyle"
     | "world"
     | "health"
-    | "state";
+    | "awards";
 }
 
 const MainSection: FC<MainSectionProps> = ({ section }) => {
@@ -76,6 +76,15 @@ const MainSection: FC<MainSectionProps> = ({ section }) => {
     }
   }, [showToast]);
 
+  useEffect(() => {
+    if (activeTab === "articles" && !editingSlug) {
+      setFormState((prev) => ({
+        ...prev,
+        category: section.charAt(0).toUpperCase() + section.slice(1)
+      }));
+    }
+  }, [activeTab, section, editingSlug]);
+
   const showNotification = useCallback((message: string, type: "success" | "error") => {
     setShowToast({ message, type });
   }, []);
@@ -84,7 +93,7 @@ const MainSection: FC<MainSectionProps> = ({ section }) => {
     setFormState({
       title: "",
       slug: "",
-      category: "",
+      category: section.charAt(0).toUpperCase() + section.slice(1),
       content: "",
       tags: [],
       status: "draft",
@@ -92,7 +101,7 @@ const MainSection: FC<MainSectionProps> = ({ section }) => {
     setImagePreview(null);
     setShowImage(false);
     setEditingSlug(null);
-  }, []);
+  }, [section]);
 
   const resetAdForm = useCallback(() => {
     setAdFormState({
@@ -983,28 +992,29 @@ const MainSection: FC<MainSectionProps> = ({ section }) => {
                   {processedAdsData.map((ad) => (
                     <article key={ad._id} className={styles.card}>
                       <div className={styles.cardImage}>
-                        <img src={ad.imageUrl} alt={ad.title} loading="lazy" />
+                        {ad.imageUrl ? (
+                          <img src={ad.imageUrl} alt={ad.title} loading="lazy" />
+                        ) : (
+                          <div style={{ background: "linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1))", height: "100%" }} />
+                        )}
                         <span className={`${styles.statusBadge} ${ad.isActive ? styles.published : styles.draft}`}>
                           {ad.isActive ? "Active" : "Inactive"}
                         </span>
                       </div>
                       <div className={styles.cardContent}>
                         <h3 className={styles.cardTitle}>{ad.title}</h3>
+                        <p className={styles.cardSummary}>
+                          <a href={ad.link} target="_blank" rel="noopener noreferrer" className={styles.adLink}>
+                            {ad.link}
+                          </a>
+                        </p>
                         <div className={styles.cardFooter}>
-                          <div className={styles.cardInfo}>
-                            <span className={styles.infoItem}>
-                              <span className={styles.infoIcon}>🔗</span>
-                              <a href={ad.link} target="_blank" rel="noopener noreferrer" className={styles.adLink}>
-                                {ad.link}
-                              </a>
-                            </span>
-                          </div>
                           <div className={styles.cardActions}>
                             <button
                               onClick={() => startEditAd(ad)}
                               className={styles.editBtn}
                               disabled={!canUpdate}
-                              title="Edit Ad"
+                              title="Edit"
                             >
                               ✏️
                             </button>
@@ -1012,7 +1022,7 @@ const MainSection: FC<MainSectionProps> = ({ section }) => {
                               onClick={() => handleDeleteAd(ad._id!)}
                               className={styles.deleteBtn}
                               disabled={!canDelete}
-                              title="Delete Ad"
+                              title="Delete"
                             >
                               🗑️
                             </button>

@@ -1,14 +1,26 @@
-$bg-primary: #0f172a;
-$bg-secondary: #1e293b;
-$bg-card: #1e293b;
-$bg-elevated: #334155;
-$border-subtle: #334155;
-$border-medium: #475569;
+$bg-primary-dark: #0f172a;
+$bg-secondary-dark: #1e293b;
+$bg-card-dark: #1e293b;
+$bg-elevated-dark: #334155;
+$border-subtle-dark: #334155;
+$border-medium-dark: #475569;
 
-$text-primary: #f1f5f9;
-$text-secondary: #cbd5e1;
-$text-muted: #94a3b8;
-$text-dim: #64748b;
+$text-primary-dark: #f1f5f9;
+$text-secondary-dark: #cbd5e1;
+$text-muted-dark: #94a3b8;
+$text-dim-dark: #64748b;
+
+$bg-primary-light: #ffffff;
+$bg-secondary-light: #f8fafc;
+$bg-card-light: #ffffff;
+$bg-elevated-light: #f1f5f9;
+$border-subtle-light: #e2e8f0;
+$border-medium-light: #cbd5e1;
+
+$text-primary-light: #0f172a;
+$text-secondary-light: #334155;
+$text-muted-light: #475569;
+$text-dim-light: #64748b;
 
 $primary: #3b82f6;
 $primary-hover: #2563eb;
@@ -46,10 +58,16 @@ $rounded-xl: 1rem;
 $rounded-2xl: 1.5rem;
 $rounded-full: 9999px;
 
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+$shadow-sm-dark: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+$shadow-md-dark: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+$shadow-lg-dark: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+$shadow-xl-dark: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+
+$shadow-sm-light: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg-light: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+$shadow-xl-light: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+
 $shadow-glow: 0 0 20px rgba(59, 130, 246, 0.4);
 
 $ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
@@ -57,10 +75,67 @@ $duration-fast: 150ms;
 $duration-base: 200ms;
 $duration-slow: 300ms;
 
+@mixin theme-dark {
+  --bg-primary: #{$bg-primary-dark};
+  --bg-secondary: #{$bg-secondary-dark};
+  --bg-card: #{$bg-card-dark};
+  --bg-elevated: #{$bg-elevated-dark};
+  --border-subtle: #{$border-subtle-dark};
+  --border-medium: #{$border-medium-dark};
+  --text-primary: #{$text-primary-dark};
+  --text-secondary: #{$text-secondary-dark};
+  --text-muted: #{$text-muted-dark};
+  --text-dim: #{$text-dim-dark};
+  --shadow-sm: #{$shadow-sm-dark};
+  --shadow-md: #{$shadow-md-dark};
+  --shadow-lg: #{$shadow-lg-dark};
+  --shadow-xl: #{$shadow-xl-dark};
+  --gradient-bg: linear-gradient(to bottom, #{$bg-primary-dark}, #020617);
+  --card-overlay: rgba(255, 255, 255, 0.03);
+  --card-overlay-hover: rgba(255, 255, 255, 0.05);
+  --input-bg: rgba(255, 255, 255, 0.03);
+  --input-bg-hover: rgba(255, 255, 255, 0.05);
+}
+
+@mixin theme-light {
+  --bg-primary: #{$bg-primary-light};
+  --bg-secondary: #{$bg-secondary-light};
+  --bg-card: #{$bg-card-light};
+  --bg-elevated: #{$bg-elevated-light};
+  --border-subtle: #{$border-subtle-light};
+  --border-medium: #{$border-medium-light};
+  --text-primary: #{$text-primary-light};
+  --text-secondary: #{$text-secondary-light};
+  --text-muted: #{$text-muted-light};
+  --text-dim: #{$text-dim-light};
+  --shadow-sm: #{$shadow-sm-light};
+  --shadow-md: #{$shadow-md-light};
+  --shadow-lg: #{$shadow-lg-light};
+  --shadow-xl: #{$shadow-xl-light};
+  --gradient-bg: linear-gradient(to bottom, #{$bg-primary-light}, #{$bg-secondary-light});
+  --card-overlay: rgba(0, 0, 0, 0.02);
+  --card-overlay-hover: rgba(0, 0, 0, 0.04);
+  --input-bg: #{$bg-secondary-light};
+  --input-bg-hover: #{$bg-elevated-light};
+}
+
+:global([data-theme="dark"]) {
+  @include theme-dark;
+}
+
+:global([data-theme="light"]) {
+  @include theme-light;
+}
+
+:global(body) {
+  @include theme-dark;
+}
+
 .wrapper {
   min-height: 100vh;
-  background: linear-gradient(to bottom, $bg-primary, #020617);
+  background: var(--gradient-bg);
   padding: $s-6;
+  transition: background 0.3s ease;
   
   @media (max-width: 768px) {
     padding: $s-4;
@@ -77,16 +152,16 @@ $duration-slow: 300ms;
   top: $s-6;
   right: $s-6;
   padding: $s-4 $s-6;
-  background: $bg-elevated;
+  background: var(--bg-elevated);
   border-radius: $rounded-lg;
-  box-shadow: $shadow-xl;
+  box-shadow: var(--shadow-xl);
   display: flex;
   align-items: center;
   gap: $s-3;
   z-index: 9999;
   animation: slideInRight $duration-base $ease-smooth;
   min-width: 320px;
-  border: 1px solid $border-medium;
+  border: 1px solid var(--border-medium);
   
   &.success {
     border-left: 4px solid $success;
@@ -138,12 +213,12 @@ $duration-slow: 300ms;
 }
 
 .header {
-  background: $bg-card;
+  background: var(--bg-card);
   border-radius: $rounded-2xl;
   padding: $s-8;
   margin-bottom: $s-6;
-  border: 1px solid $border-subtle;
-  box-shadow: $shadow-md;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
   
   @media (max-width: 768px) {
     padding: $s-5;
@@ -166,7 +241,7 @@ $duration-slow: 300ms;
 .mainHeading {
   font-size: 2.25rem;
   font-weight: 800;
-  color: $text-primary;
+  color: var(--text-primary);
   margin: 0 0 $s-2 0;
   display: flex;
   align-items: center;
@@ -189,7 +264,7 @@ $duration-slow: 300ms;
 
 .headerSubtitle {
   font-size: 1rem;
-  color: $text-muted;
+  color: var(--text-muted);
   margin: 0;
   font-weight: 500;
 }
@@ -217,8 +292,8 @@ $duration-slow: 300ms;
 }
 
 .statCard {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid $border-subtle;
+  background: var(--card-overlay);
+  border: 1px solid var(--border-subtle);
   border-radius: $rounded-xl;
   padding: $s-5;
   min-width: 110px;
@@ -230,7 +305,7 @@ $duration-slow: 300ms;
   
   &:hover {
     transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-overlay-hover);
     border-color: $primary;
     box-shadow: 0 8px 16px rgba($primary, 0.15);
   }
@@ -248,19 +323,19 @@ $duration-slow: 300ms;
 
 .statLabel {
   font-size: 0.7rem;
-  color: $text-muted;
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   font-weight: 600;
 }
 
 .editor {
-  background: $bg-card;
+  background: var(--bg-card);
   border-radius: $rounded-2xl;
   padding: $s-8;
   margin-bottom: $s-6;
-  border: 1px solid $border-subtle;
-  box-shadow: $shadow-md;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
   
   @media (max-width: 768px) {
     padding: $s-5;
@@ -273,13 +348,13 @@ $duration-slow: 300ms;
   align-items: center;
   margin-bottom: $s-6;
   padding-bottom: $s-5;
-  border-bottom: 2px solid $border-subtle;
+  border-bottom: 2px solid var(--border-subtle);
 }
 
 .editorTitle {
   font-size: 1.5rem;
   font-weight: 700;
-  color: $text-primary;
+  color: var(--text-primary);
   margin: 0;
   display: flex;
   align-items: center;
@@ -295,9 +370,9 @@ $duration-slow: 300ms;
   width: 2.5rem;
   height: 2.5rem;
   border-radius: $rounded-full;
-  border: 1px solid $border-subtle;
+  border: 1px solid var(--border-subtle);
   background: transparent;
-  color: $text-muted;
+  color: var(--text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -338,7 +413,7 @@ $duration-slow: 300ms;
 .label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: $text-secondary;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: $s-1;
@@ -353,27 +428,28 @@ $duration-slow: 300ms;
 .select {
   width: 100%;
   padding: $s-3 $s-4;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid $border-subtle;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-subtle);
   border-radius: $rounded-lg;
-  color: $text-primary;
+  color: var(--text-primary);
   font-size: 0.95rem;
   font-family: inherit;
   transition: all $duration-base $ease-smooth;
   
   &:hover {
-    border-color: $border-medium;
+    border-color: var(--border-medium);
+    background: var(--input-bg-hover);
   }
   
   &:focus {
     outline: none;
     border-color: $primary;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--input-bg-hover);
     box-shadow: 0 0 0 3px rgba($primary, 0.1);
   }
   
   &::placeholder {
-    color: $text-dim;
+    color: var(--text-dim);
   }
   
   &:disabled {
@@ -399,7 +475,7 @@ $duration-slow: 300ms;
 
 .charCount {
   font-size: 0.8rem;
-  color: $text-dim;
+  color: var(--text-dim);
   text-align: right;
   margin-top: $s-1;
   font-weight: 500;
@@ -407,7 +483,7 @@ $duration-slow: 300ms;
 
 .hint {
   font-size: 0.8rem;
-  color: $text-dim;
+  color: var(--text-dim);
   margin-top: -$s-1;
 }
 
@@ -462,22 +538,22 @@ $duration-slow: 300ms;
 }
 
 .secondaryBtn {
-  background: rgba(255, 255, 255, 0.05);
-  color: $text-secondary;
-  border: 1.5px solid $border-medium;
+  background: var(--card-overlay-hover);
+  color: var(--text-secondary);
+  border: 1.5px solid var(--border-medium);
   
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: $border-medium;
+    background: var(--card-overlay-hover);
+    border-color: var(--border-medium);
   }
 }
 
 .articlesSection {
-  background: $bg-card;
+  background: var(--bg-card);
   border-radius: $rounded-2xl;
   padding: $s-8;
-  border: 1px solid $border-subtle;
-  box-shadow: $shadow-md;
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-md);
   
   @media (max-width: 768px) {
     padding: $s-5;
@@ -491,7 +567,7 @@ $duration-slow: 300ms;
 .sectionTitle {
   font-size: 1.75rem;
   font-weight: 700;
-  color: $text-primary;
+  color: var(--text-primary);
   margin: 0 0 $s-5 0;
 }
 
@@ -523,33 +599,33 @@ $duration-slow: 300ms;
   top: 50%;
   transform: translateY(-50%);
   font-size: 1.1rem;
-  color: $text-dim;
+  color: var(--text-dim);
   pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
   padding: $s-3 $s-4 $s-3 3rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid $border-subtle;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-subtle);
   border-radius: $rounded-lg;
-  color: $text-primary;
+  color: var(--text-primary);
   font-size: 0.95rem;
   transition: all $duration-base $ease-smooth;
   
   &:hover {
-    border-color: $border-medium;
+    border-color: var(--border-medium);
   }
   
   &:focus {
     outline: none;
     border-color: $primary;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--input-bg-hover);
     box-shadow: 0 0 0 3px rgba($primary, 0.1);
   }
   
   &::placeholder {
-    color: $text-dim;
+    color: var(--text-dim);
   }
 }
 
@@ -565,10 +641,10 @@ $duration-slow: 300ms;
 
 .filterSelect {
   padding: $s-3 $s-10 $s-3 $s-4;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid $border-subtle;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-subtle);
   border-radius: $rounded-lg;
-  color: $text-primary;
+  color: var(--text-primary);
   font-size: 0.9rem;
   cursor: pointer;
   transition: all $duration-base $ease-smooth;
@@ -578,7 +654,7 @@ $duration-slow: 300ms;
   background-position: right $s-3 center;
   
   &:hover {
-    border-color: $border-medium;
+    border-color: var(--border-medium);
   }
   
   &:focus {
@@ -594,8 +670,8 @@ $duration-slow: 300ms;
 
 .viewToggle {
   display: flex;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1.5px solid $border-subtle;
+  background: var(--card-overlay);
+  border: 1.5px solid var(--border-subtle);
   border-radius: $rounded-lg;
   overflow: hidden;
   padding: $s-1;
@@ -607,7 +683,7 @@ $duration-slow: 300ms;
   background: transparent;
   border: none;
   border-radius: $rounded-md;
-  color: $text-muted;
+  color: var(--text-muted);
   cursor: pointer;
   transition: all $duration-fast $ease-smooth;
   font-size: 1.1rem;
@@ -616,8 +692,8 @@ $duration-slow: 300ms;
   justify-content: center;
   
   &:hover {
-    color: $text-secondary;
-    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+    background: var(--card-overlay-hover);
   }
   
   &Active {
@@ -667,8 +743,8 @@ $duration-slow: 300ms;
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid $border-subtle;
+  background: var(--card-overlay);
+  border: 1px solid var(--border-subtle);
   border-radius: $rounded-xl;
   overflow: hidden;
   transition: all $duration-base $ease-smooth;
@@ -677,7 +753,7 @@ $duration-slow: 300ms;
   
   &:hover {
     transform: translateY(-4px);
-    box-shadow: $shadow-lg;
+    box-shadow: var(--shadow-lg);
     border-color: $primary;
   }
 }
@@ -712,7 +788,7 @@ $duration-slow: 300ms;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   backdrop-filter: blur(12px);
-  box-shadow: $shadow-md;
+  box-shadow: var(--shadow-md);
   
   &.published {
     background: rgba($success, 0.9);
@@ -727,7 +803,7 @@ $duration-slow: 300ms;
   }
   
   &.archived {
-    background: rgba($text-dim, 0.9);
+    background: rgba($text-dim-dark, 0.9);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
   }
@@ -764,15 +840,15 @@ $duration-slow: 300ms;
 }
 
 .subCategoryBadge {
-  background: rgba(255, 255, 255, 0.05);
-  color: $text-secondary;
-  border: 1px solid $border-subtle;
+  background: var(--card-overlay-hover);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
 }
 
 .cardTitle {
   font-size: 1.25rem;
   font-weight: 700;
-  color: $text-primary;
+  color: var(--text-primary);
   margin: 0 0 $s-3 0;
   line-height: 1.4;
   display: -webkit-box;
@@ -783,7 +859,7 @@ $duration-slow: 300ms;
 
 .cardSummary {
   font-size: 0.95rem;
-  color: $text-muted;
+  color: var(--text-muted);
   line-height: 1.7;
   margin: 0 0 $s-4 0;
   flex: 1;
@@ -814,12 +890,12 @@ $duration-slow: 300ms;
 
 .tagMore {
   padding: $s-1 $s-3;
-  background: rgba(255, 255, 255, 0.05);
-  color: $text-dim;
+  background: var(--card-overlay-hover);
+  color: var(--text-dim);
   border-radius: $rounded-md;
   font-size: 0.75rem;
   font-weight: 600;
-  border: 1px solid $border-subtle;
+  border: 1px solid var(--border-subtle);
 }
 
 .cardFooter {
@@ -827,7 +903,8 @@ $duration-slow: 300ms;
   justify-content: space-between;
   align-items: flex-end;
   padding-top: $s-4;
-  border-top: 1px solid $border-subtle;
+  margin-top: $s-4;
+  border-top: 1px solid var(--border-subtle);
   gap: $s-4;
   flex-wrap: wrap;
 }
@@ -845,7 +922,7 @@ $duration-slow: 300ms;
   align-items: center;
   gap: $s-2;
   font-size: 0.8rem;
-  color: $text-dim;
+  color: var(--text-dim);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -867,7 +944,7 @@ $duration-slow: 300ms;
 .duplicateBtn {
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid $border-subtle;
+  border: 1px solid var(--border-subtle);
   border-radius: $rounded-lg;
   display: flex;
   align-items: center;
@@ -875,7 +952,7 @@ $duration-slow: 300ms;
   cursor: pointer;
   transition: all $duration-base $ease-smooth;
   font-size: 1.1rem;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--card-overlay);
   
   &:disabled {
     opacity: 0.3;
@@ -911,9 +988,9 @@ $duration-slow: 300ms;
 .flagBtn {
   padding: $s-2 $s-3;
   border-radius: $rounded-md;
-  border: 1px solid $border-subtle;
-  background: rgba(255, 255, 255, 0.02);
-  color: $text-muted;
+  border: 1px solid var(--border-subtle);
+  background: var(--card-overlay);
+  color: var(--text-muted);
   font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
@@ -924,8 +1001,8 @@ $duration-slow: 300ms;
   gap: $s-1;
   
   &:hover:not(:disabled) {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: $border-medium;
+    background: var(--card-overlay-hover);
+    border-color: var(--border-medium);
     transform: translateY(-1px);
   }
   
@@ -945,19 +1022,19 @@ $duration-slow: 300ms;
 .emptyState {
   text-align: center;
   padding: $s-12;
-  color: $text-muted;
+  color: var(--text-muted);
   
   h3 {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 $s-3 0;
-    color: $text-secondary;
+    color: var(--text-secondary);
   }
   
   p {
     font-size: 1rem;
     margin: 0;
-    color: $text-dim;
+    color: var(--text-dim);
   }
 }
 
@@ -983,7 +1060,7 @@ $duration-slow: 300ms;
   }
   
   p {
-    color: $text-muted;
+    color: var(--text-muted);
     margin: 0 0 $s-6 0;
   }
   
@@ -1021,7 +1098,7 @@ $duration-slow: 300ms;
   }
   
   p {
-    color: $text-muted;
+    color: var(--text-muted);
     margin: 0 0 $s-2 0;
   }
 }
@@ -1055,7 +1132,7 @@ $duration-slow: 300ms;
   
   p {
     font-size: 1.1rem;
-    color: $text-secondary;
+    color: var(--text-secondary);
     font-weight: 500;
   }
 }
@@ -1123,21 +1200,22 @@ $duration-slow: 300ms;
 }
 
 .imageUploadArea {
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--border-medium);
   border-radius: 8px;
   padding: 20px;
   text-align: center;
   cursor: pointer;
   transition: border-color 0.2s;
-  background: #f9f9f9;
+  background: var(--card-overlay);
 
   &:hover {
-    border-color: #888;
+    border-color: $primary;
+    background: var(--card-overlay-hover);
   }
 }
 
 .uploadPlaceholder {
-  color: #666;
+  color: var(--text-muted);
 
   .uploadIcon {
     font-size: 3rem;
@@ -1171,13 +1249,13 @@ $duration-slow: 300ms;
   cursor: pointer;
 
   &:hover {
-    background: rgba(200,0,0,0.9);
+    background: $danger;
   }
 }
 
 .tabContainer {
   margin: 2rem 0;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid var(--border-subtle);
 }
 
 .tabs {
@@ -1196,20 +1274,20 @@ $duration-slow: 300ms;
   cursor: pointer;
   font-size: 0.9375rem;
   font-weight: 500;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--text-muted);
   transition: all 0.2s ease;
   position: relative;
   bottom: -2px;
 
   &:hover {
-    color: rgba(0, 0, 0, 0.8);
-    background: rgba(0, 0, 0, 0.02);
+    color: var(--text-secondary);
+    background: var(--card-overlay);
   }
 
   &Active {
-    color: #3b82f6;
-    border-bottom-color: #3b82f6;
-    background: rgba(59, 130, 246, 0.05);
+    color: $primary;
+    border-bottom-color: $primary;
+    background: rgba($primary, 0.05);
   }
 }
 
@@ -1224,20 +1302,20 @@ $duration-slow: 300ms;
   min-width: 1.5rem;
   height: 1.5rem;
   padding: 0 0.5rem;
-  background: rgba(59, 130, 246, 0.1);
-  color: #3b82f6;
+  background: rgba($primary, 0.1);
+  color: $primary;
   border-radius: 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
 
   .tabActive & {
-    background: #3b82f6;
+    background: $primary;
     color: white;
   }
 }
 
 .adLink {
-  color: #3b82f6;
+  color: $primary;
   text-decoration: none;
   font-size: 0.875rem;
   max-width: 200px;
