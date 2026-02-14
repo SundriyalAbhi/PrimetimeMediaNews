@@ -1,3 +1,4 @@
+@use 'sass:map';
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 $breakpoints: (
@@ -6,8 +7,8 @@ $breakpoints: (
   desktop: 992px,
 );
 
-$mq-tablet:  '(min-width: #{map-get($breakpoints, tablet)})';
-$mq-desktop: '(min-width: #{map-get($breakpoints, desktop)})';
+$mq-tablet:  '(min-width: #{map.get($breakpoints, tablet)})';
+$mq-desktop: '(min-width: #{map.get($breakpoints, desktop)})';
 
 $radius-sm:  0.5rem;
 $radius-md:  0.75rem;

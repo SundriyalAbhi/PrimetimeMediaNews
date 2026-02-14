@@ -11,6 +11,7 @@ interface NewsContextType {
   lifestyleNews: NewsItem[] | null;
   entertainmentNews: NewsItem[] | null;
   healthNews: NewsItem[] | null;
+  awardsNews: NewsItem[] | null;
   techNews: NewsItem[] | null;
   worldNews: NewsItem[] | null;
   educationNews: NewsItem[] | null;
@@ -39,6 +40,7 @@ export const NewsProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [lifestyleNews, setLifestyleNews] = useState<NewsItem[] | null>(null);
   const [entertainmentNews, setEntertainmentNews] = useState<NewsItem[] | null>(null);
   const [healthNews, setHealthNews] = useState<NewsItem[] | null>(null);
+  const [awardsNews, setAwardsNews] = useState<NewsItem[] | null>(null);
   const [techNews, setTechNews] = useState<NewsItem[] | null>(null);
   const [worldNews, setWorldNews] = useState<NewsItem[] | null>(null);
   const [educationNews, setEducationNews] = useState<NewsItem[] | null>(null);
@@ -57,6 +59,7 @@ export const NewsProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setLifestyleNews(null);
       setEntertainmentNews(null);
       setHealthNews(null);
+      setAwardsNews(null);
       setTechNews(null);
       setWorldNews(null);
       setEducationNews(null);
@@ -74,6 +77,7 @@ export const NewsProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setLifestyleNews(sections.lifestyle ?? null);
     setEntertainmentNews(sections.entertainment ?? null);
     setHealthNews(sections.health ?? null);
+    setAwardsNews(sections.awards ?? null);
     setTechNews(sections.tech ?? null);
     setWorldNews(sections.world ?? null);
     setEducationNews(sections.education ?? null);
@@ -91,6 +95,7 @@ export const NewsProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       "lifestyle",
       "entertainment",
       "health",
+      "awards",
       "tech",
       "world",
       "education",
@@ -117,6 +122,7 @@ export const NewsProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     lifestyleNews,
     entertainmentNews,
     healthNews,
+    awardsNews,
     techNews,
     worldNews,
     educationNews,

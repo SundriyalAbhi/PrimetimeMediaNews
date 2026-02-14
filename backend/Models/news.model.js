@@ -64,7 +64,7 @@ const newsSchema = new mongoose.Schema(
     lifestyle: [newsItemSchema],
     world: [newsItemSchema],
     health: [newsItemSchema],
-    state: [newsItemSchema],
+    awards: [newsItemSchema],
 
 
     lastUpdated: {

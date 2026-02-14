@@ -37,6 +37,7 @@ export interface NewsSections {
   opinion?: NewsItem[];
   auto?: NewsItem[];
   travel?: NewsItem[];
+  awards?: NewsItem[];
 }
 
 export interface NewsDocument extends NewsSections {
