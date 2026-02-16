@@ -107,8 +107,6 @@ interface UserContextType {
   StoreSessionData: ApiResponsePromise;
   MemberActivitylog: ActivityLogPromise;
   GetSystemAnnouncement: AnnouncementPromise;
-  SENDOTP: ApiResponsePromise;
-  VERIFYOTP: ApiResponsePromise;
   PasswordUpdate: ApiResponsePromise;
 }
 
@@ -181,24 +179,6 @@ async function GetSystemAnnouncement(body: { companyId: string }): Promise<ApiRe
   }
 }
 
-async function SENDOTP(body: ApiBody): Promise<ApiResponse> {
-  try {
-    const response = await API.post(`${baseURL}/otp/sentOTP`, body);
-    return { status: response?.status, data: response?.data };
-  } catch (error: any) {
-    return { status: error?.response?.status, data: error?.response?.data };
-  }
-}
-
-async function VERIFYOTP(body: ApiBody): Promise<ApiResponse> {
-  try {
-    const response = await API.post(`${baseURL}/otp/verifyOTP`, body);
-    return { status: response?.status, data: response?.data };
-  } catch (error: any) {
-    return { status: error?.response?.status, data: error?.response?.data };
-  }
-}
-
 async function PasswordUpdate(body: ApiBody): Promise<ApiResponse> {
   try {
     const response = await API.put(`${baseURL}/profile/updatepassword/`, body);
@@ -262,8 +242,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         StoreSessionData,
         MemberActivitylog,
         GetSystemAnnouncement,
-        SENDOTP,
-        VERIFYOTP,
         PasswordUpdate
       }}
     >

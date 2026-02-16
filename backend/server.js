@@ -1,8 +1,10 @@
+const dotenv = require("dotenv")
+dotenv.config({path:".env"})
+
 const express = require("express")
 const mongoose = require("mongoose")
 const cors = require("cors")
 const bodyParser = require("body-parser")
-const dotenv = require("dotenv")
 const { connectdb } = require("./Config/db")
 const morgan = require("morgan")
 const AuthRouter = require("./routes/auth.routes")
@@ -10,9 +12,9 @@ const NewsRouter = require("./routes/news.routes")
 const OTPRouter = require("./routes/otp.route")
 const AdsRouter = require("./routes/advertisement.route")
 
+
 const app = express()
 
-dotenv.config({path:"./Config/config.env"})
 connectdb()
 
 app.use(cors())
@@ -40,5 +42,5 @@ app.use("/otp",OTPRouter)
 app.use("/ads",AdsRouter)
 
 app.listen(process.env.PORT,()=>{
-    console.log("server is running");
+    console.log(`Server is running on port ${process.env.PORT}`);
 })

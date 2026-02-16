@@ -3,9 +3,30 @@ const jwt = require('jsonwebtoken');
 const User = require('../Models/user.model');
 const permissionsByRole = require('../Config/permissions.js');
 
+const SIGNUP_SECRET_KEY = process.env.SIGNUP_SECRET_KEY;
+const SIGNIN_SECRET_KEY = process.env.SIGNIN_SECRET_KEY;
+
+
 exports.UserSignUp = async (req, res) => {
   try {
-    const checkUser = await User.findOne({ email: req.body.email });
+    const { email, password, role, secretKey } = req.body;
+    
+
+    if (!SIGNUP_SECRET_KEY) {
+      return res.status(500).json({ 
+        success: false,
+        msg: "Server configuration error: Secret key not set" 
+      });
+    }
+
+    if (!secretKey || secretKey !== SIGNUP_SECRET_KEY) {
+      return res.status(401).json({ 
+        success: false,
+        msg: "Invalid secret key" 
+      });
+    }
+
+    const checkUser = await User.findOne({ email: email });
     if (checkUser) {
       return res.status(409).json({ 
         success: false,
@@ -13,7 +34,6 @@ exports.UserSignUp = async (req, res) => {
       });
     }
 
-    const { password, role } = req.body;
     if (!password || password.length < 6) {
       return res.status(400).json({ 
         success: false,
@@ -46,7 +66,6 @@ exports.UserSignUp = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('SignUp Error:', error);
     return res.status(500).json({ 
       success: false,
       msg: "Server error during registration" 
@@ -56,7 +75,8 @@ exports.UserSignUp = async (req, res) => {
 
 exports.UserSignIn = async (req, res) => {
   try {
-    const { email, password, role } = req.body;
+    const { email, password, role, secretKey } = req.body;
+  
 
     if (!email || !password) {
       return res.status(400).json({ 
@@ -65,8 +85,26 @@ exports.UserSignIn = async (req, res) => {
       });
     }
 
+    if (role === "SUPER_ADMIN") {
+      if (!SIGNIN_SECRET_KEY) {
+        return res.status(500).json({ 
+          success: false,
+          msg: "Server configuration error: Secret key not set" 
+        });
+      }
+      
+      if (!secretKey || secretKey !== SIGNIN_SECRET_KEY) {
+        return res.status(401).json({ 
+          success: false,
+          msg: "Invalid secret key for Super Admin" 
+        });
+      }
+    }
+
     const query = { email: email };
-    if (role) query.role = role; 
+    if (role && role !== "SUPER_ADMIN") {
+      query.role = role;
+    }
 
     const user = await User.findOne(query).select('+password');
     
@@ -123,11 +161,9 @@ exports.UserSignIn = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('SignIn Error:', error);
     return res.status(500).json({ 
       success: false,
       msg: "Server error during login" 
     });
   }
 };
-

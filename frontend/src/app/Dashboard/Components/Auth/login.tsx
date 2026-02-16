@@ -4,11 +4,11 @@ import React, { useContext, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Bounce, toast } from "react-toastify";
 import { UserContext } from "@/app/Dashboard/Context/ManageUserContext";
-import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, Loader2, ArrowRight, Key } from "lucide-react";
 import { AuthChildProps } from "./types";
 import styles from "./SignIn.module.scss";
 
-type Role = "User" | "Admin" | "SuperAdmin";
+type Role = "User" | "Admin" | "SUPER_ADMIN";
 
 interface SignInProps {
   setMode: (mode: string) => void;
@@ -24,15 +24,25 @@ interface LoginResponse {
 }
 
 export const SignIn: React.FC<AuthChildProps> = ({ setMode }) => {
-  const [formData, setFormData] = useState({ role: "User" as Role, email: "", password: "" });
+  const [formData, setFormData] = useState({ 
+    role: "User" as Role, 
+    email: "", 
+    password: "",
+    secretKey: "" 
+  });
   const [showPassword, setShowPassword] = useState(false);
+  const [showSecretKey, setShowSecretKey] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
   const { Userdispatch, UserSignIn } = useContext(UserContext) as any;
 
   const isValidEmail = EMAIL_REGEX.test(formData.email);
-  const isFormValid = formData.email.trim() && formData.password.trim() && isValidEmail;
+  const isFormValid = 
+    formData.email.trim() && 
+    formData.password.trim() && 
+    isValidEmail &&
+    (formData.role === "SUPER_ADMIN" ? formData.secretKey.trim() : true);
 
   const handleChange = useCallback(
     (field: keyof typeof formData) =>
@@ -46,7 +56,7 @@ export const SignIn: React.FC<AuthChildProps> = ({ setMode }) => {
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!isFormValid) {
-        toast.error("Please fill valid email and password", {
+        toast.error("Please fill all required fields with valid data", {
           position: "top-center",
           transition: Bounce,
         });
@@ -56,11 +66,18 @@ export const SignIn: React.FC<AuthChildProps> = ({ setMode }) => {
       try {
         setLoading(true);
 
-        const result: LoginResponse | null = await UserSignIn({
+        const loginPayload: any = {
           email: formData.email,
           password: formData.password,
           role: formData.role,
-        });
+        };
+
+        // Add secret key only for Super Admin
+        if (formData.role === "SUPER_ADMIN") {
+          loginPayload.secretKey = formData.secretKey;
+        }
+
+        const result: LoginResponse | null = await UserSignIn(loginPayload);
 
         if (!result) {
           toast.error("Unexpected error during login", { position: "top-center", transition: Bounce });
@@ -90,7 +107,7 @@ export const SignIn: React.FC<AuthChildProps> = ({ setMode }) => {
             break;
 
           case 401:
-            toast.error(data?.msg || "Wrong password", {
+            toast.error(data?.msg || "Wrong password or invalid credentials", {
               position: "top-center",
               transition: Bounce,
             });
@@ -145,7 +162,11 @@ export const SignIn: React.FC<AuthChildProps> = ({ setMode }) => {
           <div className={styles.selectWrapper}>
             <select
               value={formData.role}
-              onChange={(e) => setFormData((prev) => ({ ...prev, role: e.target.value as Role }))}
+              onChange={(e) => setFormData((prev) => ({ 
+                ...prev, 
+                role: e.target.value as Role,
+                secretKey: "" 
+              }))}
               className={styles.select}
               disabled={loading}
             >
@@ -186,6 +207,28 @@ export const SignIn: React.FC<AuthChildProps> = ({ setMode }) => {
             </button>
           </div>
 
+          {/* Secret Key Input - Only visible for Super Admin */}
+          {formData.role === "SUPER_ADMIN" && (
+            <div className={styles.inputGroup}>
+              <Key className={styles.inputIcon} />
+              <input
+                type={showSecretKey ? "text" : "password"}
+                placeholder="Super Admin Secret Key"
+                value={formData.secretKey}
+                onChange={handleChange("secretKey")}
+                className={styles.input}
+                disabled={loading}
+              />
+              <button
+                type="button"
+                onClick={() => setShowSecretKey((v) => !v)}
+                className={styles.passwordToggle}
+              >
+                {showSecretKey ? <EyeOff /> : <Eye />}
+              </button>
+            </div>
+          )}
+
           <button
             type="submit"
             disabled={!isFormValid || loading}
@@ -206,13 +249,13 @@ export const SignIn: React.FC<AuthChildProps> = ({ setMode }) => {
         </form>
 
         <div className={styles.footer}>
-          <button
+          {/* <button
             onClick={() => setMode("forgot")}
             className={styles.link}
             disabled={loading}
           >
             Forgot Password?
-          </button>
+          </button> */}
           <p className={styles.signupPrompt}>
             New here?{" "}
             <button
